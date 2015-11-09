@@ -2,14 +2,14 @@ var scene, camera, renderer;
     var geometry, material, mesh;
 
     init();
-    //animate();
+    animate();
 
     function init() {
 
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 100000 );
-        //camera.position.z = 1000;
+        camera.position.z = 100;
 
         // load the cube textures
         var urlPrefix   = "Images/";
@@ -22,17 +22,21 @@ var scene, camera, renderer;
         var shader  = THREE.ShaderLib["cube"];
         var uniforms    = THREE.UniformsUtils.clone( shader.uniforms );
         uniforms['tCube'].texture= textureCube;
-        var material = new THREE.ShaderMaterial({
+        var material1 = new THREE.ShaderMaterial({
             fragmentShader  : shader.fragmentShader,
             vertexShader    : shader.vertexShader,
             uniforms    : uniforms
         });
 
-        //geometry = new THREE.BoxGeometry( 400, 400, 400 );
-        geometry = new THREE.CubeGeometry( 100000, 100000, 100000, 1, 1, 1, null, true )
-        //material = new THREE.MeshBasicMaterial( { color: 0xff0000} );
+        var material2 = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube } );
 
-        skyboxMesh  = new THREE.Mesh( geometry, material );
+        //geometry = new THREE.BoxGeometry( 40, 40, 40 );
+        geometry = new THREE.CubeGeometry( 100000, 100000, 100000, 1, 1, 1, null, true )
+        material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true} );
+
+
+        skyboxMesh  = new THREE.Mesh( geometry, material2 );
+        skyboxMesh.material.side = THREE.BackSide;
         scene.add( skyboxMesh );
 
         renderer = new THREE.WebGLRenderer();
@@ -48,8 +52,8 @@ var scene, camera, renderer;
 
         requestAnimationFrame( animate );
 
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
+        //skyboxMesh.rotation.x += 0.01;
+        //skyboxMesh.rotation.y += 0.02;
 
         renderer.render( scene, camera );
 
