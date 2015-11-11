@@ -63,10 +63,13 @@ var scene, camera, renderer, controls;
     }
 
     function onWindowResize() {
+        // update the camera
+        camera.aspect   = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        // notify the renderer of the size change
+        renderer.setSize( window.innerWidth, window.innerHeight );
 
-                renderer.setSize( window.innerWidth, window.innerHeight );
-
-            }
+    }
 
     function animate() {
 
