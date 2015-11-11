@@ -54,10 +54,19 @@ var scene, camera, renderer, controls;
         //controls.addEventListener( 'change', render ); // add this only if there is no animation loop (requestAnimationFrame)
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
-        controls.enableZoom = false;
+        controls.enableZoom = true;
+        controls.keyPanSpeed = 100.0;
+
+        window.addEventListener( 'resize', onWindowResize, false );
 
 
     }
+
+    function onWindowResize() {
+
+                renderer.setSize( window.innerWidth, window.innerHeight );
+
+            }
 
     function animate() {
 
