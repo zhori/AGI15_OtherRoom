@@ -43,6 +43,13 @@ var scene, camera, renderer, controls;
 
         scene.add( skyboxMesh );
 
+        // add simple cube in the middle of the scene
+        geometryCube = new THREE.BoxGeometry(40,40,40);
+        materialCube = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true });
+
+        meshCube = new THREE.Mesh(geometryCube, materialCube);
+        scene.add(meshCube);
+
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.render( scene, camera );
@@ -75,8 +82,14 @@ var scene, camera, renderer, controls;
 
         requestAnimationFrame( animate );
 
+        if(meter != null){
+            meshCube.rotation.x += meter.volume*3;
+            meshCube.rotation.y += meter.volume*3;
+        }
+
         controls.update() // update the OrbitControls
 
         renderer.render( scene, camera );
 
     }
+
