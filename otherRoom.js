@@ -12,10 +12,10 @@ var scene, camera, renderer, controls;
         camera.position.z = 200;
 
         // load the cube textures
-        var urlPrefix   = "Images/";
-        var urls = [ urlPrefix + "posx.jpg", urlPrefix + "negx.jpg",
-            urlPrefix + "posy.jpg", urlPrefix + "negy.jpg",
-            urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
+        var urlPrefix   = "Images/canary/";
+        var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
+            urlPrefix + "posy.png", urlPrefix + "negy.png",
+            urlPrefix + "posz.png", urlPrefix + "negz.png" ];
 
         var reflectionCube = THREE.ImageUtils.loadTextureCube( urls );
         reflectionCube.format = THREE.RGBFormat;
@@ -40,9 +40,70 @@ var scene, camera, renderer, controls;
         } );
 
         skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 10000, 10000, 10000 ), material );
+        skyboxMesh.position.x = 0;
+        skyboxMesh.position.y = 0;
+        skyboxMesh.position.z = 0;
 
         scene.add( skyboxMesh );
 
+        //load window frame .obj
+        //texture
+        var manager = new THREE.LoadingManager();
+        manager.onProgress = function ( item, loaded, total ) {
+
+            console.log( item, loaded, total );
+
+        };
+
+        var texture = new THREE.Texture();
+
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round(percentComplete, 2) + '% downloaded' );
+            }
+        };
+
+        var onError = function ( xhr ) {
+        };
+
+
+        var loader = new THREE.ImageLoader( manager );
+        loader.load( 'textures/brick_diffuse.jpg', function ( image ) {
+
+            texture.image = image;
+            texture.needsUpdate = true;
+
+        } );
+
+        // model
+        var loader = new THREE.OBJLoader( manager );
+        loader.load( 'windowframe.obj', function ( object ) {
+
+            object.traverse( function ( child ) {
+
+                if ( child instanceof THREE.Mesh ) {
+
+                    child.material.map = texture;
+
+                }
+
+        } );
+
+        object.position.x = 0;
+        object.position.y = -2500;
+        object.position.z = 5000;
+        // object.rotation.x = 20* Math.PI / 180;
+        object.rotation.y = Math.PI;
+        object.scale.x = 100
+        object.scale.y = 100;
+        object.scale.z = 100;
+        obj = object
+        scene.add( obj );
+
+        }, onProgress, onError );
+
+       
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.render( scene, camera );
@@ -55,7 +116,7 @@ var scene, camera, renderer, controls;
         controls.enableDamping = true;
         controls.dampingFactor = 0.25;
         controls.enableZoom = true;
-        controls.keyPanSpeed = 100.0;
+        controls.keyPanSpeed = 50.0;
 
         window.addEventListener( 'resize', onWindowResize, false );
 
