@@ -20,10 +20,10 @@ var scene, camera, renderer, controls;
         camera.position.z = 200;
 
         // load the cube textures
-        var urlPrefix   = "Images/canary/";
-        var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
-            urlPrefix + "posy.png", urlPrefix + "negy.png",
-            urlPrefix + "posz.png", urlPrefix + "negz.png" ];
+        var urlPrefix   = "Images/";
+        var urls = [ urlPrefix + "posx.jpg", urlPrefix + "negx.jpg",
+            urlPrefix + "posy.jpg", urlPrefix + "negy.jpg",
+            urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
 
         var reflectionCube = THREE.ImageUtils.loadTextureCube( urls );
         reflectionCube.format = THREE.RGBFormat;
@@ -47,7 +47,7 @@ var scene, camera, renderer, controls;
 
         } );
 
-        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 1000, 1000, 1000 ), material );
+        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 2000, 2000, 2000 ), material );
        
         scene.add( skyboxMesh );
 
@@ -71,9 +71,9 @@ var scene, camera, renderer, controls;
 
             object.position.x = 0;
             object.position.y = -500;
-            object.position.z = 500;
-            object.rotation.y = Math.PI;
-            object.scale.x = 20
+            object.position.z = 1000;
+            //object.rotation.y = Math.PI;
+            object.scale.x = 40;
             object.scale.y = 20;
             object.scale.z = 20;
             obj = object
