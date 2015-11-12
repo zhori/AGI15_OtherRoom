@@ -8,6 +8,14 @@ var scene, camera, renderer, controls;
 
         scene = new THREE.Scene();
 
+        //light to make texture visible
+        var ambient = new THREE.AmbientLight( 0x444444 );
+        scene.add( ambient );
+
+        var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+        directionalLight.position.set( 0, 0, 1 ).normalize();
+        scene.add( directionalLight );
+
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 100000 );
         camera.position.z = 200;
 
@@ -39,23 +47,11 @@ var scene, camera, renderer, controls;
 
         } );
 
-        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 10000, 10000, 10000 ), material );
-        skyboxMesh.position.x = 0;
-        skyboxMesh.position.y = 0;
-        skyboxMesh.position.z = 0;
-
+        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 1000, 1000, 1000 ), material );
+       
         scene.add( skyboxMesh );
 
-        //load window frame .obj
-        //texture
-        var manager = new THREE.LoadingManager();
-        manager.onProgress = function ( item, loaded, total ) {
-
-            console.log( item, loaded, total );
-
-        };
-
-        var texture = new THREE.Texture();
+        // model
 
         var onProgress = function ( xhr ) {
             if ( xhr.lengthComputable ) {
@@ -68,38 +64,20 @@ var scene, camera, renderer, controls;
         };
 
 
-        var loader = new THREE.ImageLoader( manager );
-        loader.load( 'textures/brick_diffuse.jpg', function ( image ) {
+        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
-            texture.image = image;
-            texture.needsUpdate = true;
+        var loader = new THREE.OBJMTLLoader();
+        loader.load( 'model/windowframe.obj', 'model/windowframe.mtl', function ( object ) {
 
-        } );
-
-        // model
-        var loader = new THREE.OBJLoader( manager );
-        loader.load( 'windowframe.obj', function ( object ) {
-
-            object.traverse( function ( child ) {
-
-                if ( child instanceof THREE.Mesh ) {
-
-                    child.material.map = texture;
-
-                }
-
-        } );
-
-        object.position.x = 0;
-        object.position.y = -2500;
-        object.position.z = 5000;
-        // object.rotation.x = 20* Math.PI / 180;
-        object.rotation.y = Math.PI;
-        object.scale.x = 100
-        object.scale.y = 100;
-        object.scale.z = 100;
-        obj = object
-        scene.add( obj );
+            object.position.x = 0;
+            object.position.y = -500;
+            object.position.z = 500;
+            object.rotation.y = Math.PI;
+            object.scale.x = 20
+            object.scale.y = 20;
+            object.scale.z = 20;
+            obj = object
+            scene.add( obj );
 
         }, onProgress, onError );
 
