@@ -17,13 +17,15 @@ var scene, camera, renderer, controls;
         scene.add( directionalLight );
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 100000 );
-        camera.position.z = 200;
+        camera.position.z = 7500;
 
+        // Add the skybox
         // load the cube textures
         var urlPrefix   = "Images/";
         var urls = [ urlPrefix + "posx.jpg", urlPrefix + "negx.jpg",
             urlPrefix + "posy.jpg", urlPrefix + "negy.jpg",
             urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
+
 
         var reflectionCube = THREE.ImageUtils.loadTextureCube( urls );
         reflectionCube.format = THREE.RGBFormat;
@@ -47,12 +49,11 @@ var scene, camera, renderer, controls;
 
         } );
 
-        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 2000, 2000, 2000 ), material );
+        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 10000, 10000, 10000 ), material );
        
         scene.add( skyboxMesh );
 
-        // model
-
+        // Model of window
         var onProgress = function ( xhr ) {
             if ( xhr.lengthComputable ) {
                 var percentComplete = xhr.loaded / xhr.total * 100;
@@ -66,22 +67,29 @@ var scene, camera, renderer, controls;
 
         THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
 
+
         var loader = new THREE.OBJMTLLoader();
         loader.load( 'model/windowframe.obj', 'model/windowframe.mtl', function ( object ) {
 
             object.position.x = 0;
-            object.position.y = -500;
-            object.position.z = 1000;
+            object.position.y = -2500;
+            object.position.z = 4000;
             //object.rotation.y = Math.PI;
-            object.scale.x = 40;
-            object.scale.y = 20;
-            object.scale.z = 20;
+            object.scale.x = 200;
+            object.scale.y = 100;
+            object.scale.z = 100;
             obj = object
             scene.add( obj );
 
         }, onProgress, onError );
 
-       
+        // add simple cube in the middle of the scene that reacts to sound
+        geometryCube = new THREE.BoxGeometry(400,400,400);
+        materialCube = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true });
+
+        meshCube = new THREE.Mesh(geometryCube, materialCube);
+        scene.add(meshCube);
+
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.render( scene, camera );
@@ -114,8 +122,14 @@ var scene, camera, renderer, controls;
 
         requestAnimationFrame( animate );
 
+        if(meter != null){
+            meshCube.rotation.x += meter.volume*3;
+            meshCube.rotation.y += meter.volume*3;
+        }
+
         controls.update() // update the OrbitControls
 
         renderer.render( scene, camera );
 
     }
+
