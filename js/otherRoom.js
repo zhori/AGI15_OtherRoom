@@ -1,5 +1,6 @@
-var scene, camera, renderer, controls;
+    var scene, camera, renderer, controls;
     var geometry, material, mesh;
+
 
     init();
     animate();
@@ -16,7 +17,7 @@ var scene, camera, renderer, controls;
         directionalLight.position.set( 0, 0, 1 ).normalize();
         scene.add( directionalLight );
 
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 100000 );
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 400000 );
         camera.position.z = 7500;
 
         // Add the skybox
@@ -49,8 +50,8 @@ var scene, camera, renderer, controls;
 
         } );
 
-        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 10000, 10000, 10000 ), material );
-       
+        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 200000, 200000, 200000 ), material );
+
         scene.add( skyboxMesh );
 
         // Model of window
@@ -84,7 +85,7 @@ var scene, camera, renderer, controls;
         }, onProgress, onError );
 
         // add simple cube in the middle of the scene that reacts to sound
-        geometryCube = new THREE.BoxGeometry(400,400,400);
+        geometryCube = new THREE.BoxGeometry(800 , 800, 800);
         materialCube = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true });
 
         meshCube = new THREE.Mesh(geometryCube, materialCube);
@@ -120,11 +121,24 @@ var scene, camera, renderer, controls;
 
     function animate() {
 
-        requestAnimationFrame( animate );
 
+      //meshCube.material = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe:true });
+
+
+        requestAnimationFrame( animate );
         if(meter != null){
-            meshCube.rotation.x += meter.volume*3;
-            meshCube.rotation.y += meter.volume*3;
+
+            if (meter.checkClipping() && recentclip == 0 ){
+              meshCube.material = new THREE.MeshBasicMaterial({color: '#'+Math.floor(Math.random()*16777215).toString(16), wireframe:true });
+              recentclip = 1;
+            }
+            else
+            {
+              recentclip = 0;
+            }
+
+            meshCube.rotation.x += meter.volume/2;
+            meshCube.rotation.y += meter.volume/2;
         }
 
         controls.update() // update the OrbitControls
