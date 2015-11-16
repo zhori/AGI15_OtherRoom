@@ -58,7 +58,7 @@ function gotStream(stream) {
     meter = createAudioMeter(audioContext);
     mediaStreamSource.connect(meter);
 
-    // updating the visual meter 
+    // updating the visual meter
     drawLoop();
 }
 
@@ -68,7 +68,11 @@ function drawLoop( time ) {
     canvasContext.clearRect(0,0,WIDTH,HEIGHT);
 
     // draw a bar based on the current volume
-    canvasContext.fillStyle = "lightblue";
+    if (meter.checkClipping())
+        canvasContext.fillStyle = "lightblue";
+    else
+        canvasContext.fillStyle = "green";
+
     canvasContext.fillRect(0, 0, WIDTH, meter.volume*HEIGHT*1.4);
 
     // set up the next visual callback
@@ -83,10 +87,23 @@ function createAudioMeter(audioContext,clipLevel,averaging,clipLag) {
 	processor.onaudioprocess = volumeAudioProcess;
 	processor.volume = 0;
 	processor.averaging = averaging || 0.95;
+  processor.clipping = false;
+	processor.lastClip = 0;
+  processor.clipLevel = clipLevel || 0.70;
+  processor.clipLag = clipLag || 30;
 
 	// this will have no effect, since we don't copy the input to the output,
 	// but works around a current Chrome bug.
 	processor.connect(audioContext.destination);
+
+  processor.checkClipping =
+		function(){
+			if (!this.clipping)
+				return false;
+			if ((this.lastClip + this.clipLag) < window.performance.now())
+				this.clipping = false;
+			return this.clipping;
+		};
 
 	processor.shutdown =
 		function(){
@@ -106,6 +123,10 @@ function volumeAudioProcess( event ) {
 	// Do a root-mean-square on the samples: sum up the squares...
     for (var i=0; i<bufLength; i++) {
     	x = buf[i];
+      if (Math.abs(x)>=this.clipLevel) {
+    		this.clipping = true;
+    		this.lastClip = window.performance.now();
+    	}
     	sum += x * x;
     }
 
