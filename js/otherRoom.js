@@ -14,7 +14,7 @@
         scene.add( ambient );
 
         var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-        directionalLight.position.set( 0, 0, 1 ).normalize();
+        directionalLight.position.set( 0, 0, 10000 ).normalize();
         scene.add( directionalLight );
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 400000 );
@@ -99,10 +99,19 @@
 
         //add green grass plane
 
-        geometryPlane = new THREE.BoxGeometry(10000,300,10000);
+        geometryPlane = new THREE.BoxGeometry(100000,300,100000);
         materialPlane = new THREE.MeshPhongMaterial({color: 0x99FF33 });
-        //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
-        meshPlane = new THREE.Mesh(geometryPlane, materialPlane);
+        var imgTexture = THREE.ImageUtils.loadTexture( "textures/Grass.jpg" );
+        imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
+        imgTexture.anisotropy = 16;
+        var shininess = 50, shading = THREE.SmoothShading;
+        materialPlane2 = new THREE.MeshBasicMaterial( { 
+            map: imgTexture, 
+            shininess: shininess,
+            shading: shading 
+        } );
+
+        meshPlane = new THREE.Mesh(geometryPlane, materialPlane2);
         
         meshPlane.position.y = -2700;
         scene.add(meshPlane);
