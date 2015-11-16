@@ -9,7 +9,7 @@ var scene, camera, renderer, controls;
         scene = new THREE.Scene();
 
         //light to make texture visible
-        var ambient = new THREE.AmbientLight( 0x444444 );
+        var ambient = new THREE.AmbientLight( 0x404040 );
         scene.add( ambient );
 
         var directionalLight = new THREE.DirectionalLight( 0xffeedd );
@@ -21,10 +21,16 @@ var scene, camera, renderer, controls;
 
         // Add the skybox
         // load the cube textures
-        var urlPrefix   = "Images/";
+        var urlPrefix   = "Images/skycartoon/";
         var urls = [ urlPrefix + "posx.jpg", urlPrefix + "negx.jpg",
             urlPrefix + "posy.jpg", urlPrefix + "negy.jpg",
             urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
+
+        // var urlPrefix   = "Images/skycartoon/";
+        // var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
+        //     urlPrefix + "posy.png", urlPrefix + "negy.png",
+        //     urlPrefix + "posz.png", urlPrefix + "negz.png" ];
+
 
 
         var reflectionCube = THREE.ImageUtils.loadTextureCube( urls );
@@ -90,6 +96,16 @@ var scene, camera, renderer, controls;
         meshCube = new THREE.Mesh(geometryCube, materialCube);
         scene.add(meshCube);
 
+        //add green grass plane
+
+        geometryPlane = new THREE.BoxGeometry(10000,300,10000);
+        materialPlane = new THREE.MeshPhongMaterial({color: 0x99FF33 });
+        //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        meshPlane = new THREE.Mesh(geometryPlane, materialPlane);
+        
+        meshPlane.position.y = -2700;
+        scene.add(meshPlane);
+
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.render( scene, camera );
@@ -132,4 +148,6 @@ var scene, camera, renderer, controls;
         renderer.render( scene, camera );
 
     }
+
+ 
 
