@@ -107,6 +107,10 @@
         meshPlane.position.y = -2700;
         scene.add(meshPlane);
 
+        // add artistic render effect
+        artisticRendering(meshCube);
+
+
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.render( scene, camera );
@@ -161,6 +165,86 @@
 
         renderer.render( scene, camera );
 
+    }
+
+    function artisticRendering (target) {
+
+    console.log(target);
+    console.log(target.geometry.faces);
+
+    var targetFaces = target.geometry.faces;
+    var targetVertices = target.geometry.vertices;
+
+    // create the particle variables
+    var particleCount = 1800,
+        particles = new THREE.Geometry(),
+        pMaterial = new THREE.PointsMaterial({
+          color: 0xFFFFFF,
+          size: 20
+        });
+
+    
+    var i;
+    for (i = 0; i < targetFaces.length; ++i){
+        // Get copy the defining vertices for the current face
+        var face = targetFaces[i],
+            vec3_a = targetVertices[face.a],
+            vec3_b = targetVertices[face.b],
+            vec3_c = targetVertices[face.c];
+
+        vec3_a = new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z); 
+        vec3_b = new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z);
+        vec3_c = new THREE.Vector3(vec3_c.x, vec3_c.y, vec3_c.z);
+
+        particles.vertices.push(new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z));
+        particles.vertices.push(new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z));
+        particles.vertices.push(new THREE.Vector3(vec3_c.x, vec3_c.y, vec3_c.z));
+
+        var edgeAB = interpolate(vec3_a, vec3_b, 10),
+            edgeAC = interpolate(vec3_a, vec3_c, 10);
+
+        var j;
+        for(j = 0; j < edgeAB.length; ++j){
+            particles.vertices.push(new THREE.Vector3(edgeAB[j].x, edgeAB[j].y, edgeAB[j].z));
+            particles.vertices.push(new THREE.Vector3(edgeAC[j].x, edgeAC[j].y, edgeAC[j].z));
+        }
+
+
+
+    }
+
+    // create the particle system
+    var particleSystem = new THREE.Points(
+        particles,
+        pMaterial);
+
+    // add it to the scene
+    scene.add(particleSystem);
+    }
+
+    function interpolate(vec3_a, vec3_b, resultLength){
+
+        var vec3_current, denominator, step, result;
+        
+        // create copies of parameters
+        vec3_current = new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z);
+        vec3_a = new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z);
+        vec3_b = new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z);
+
+        denominator = Math.max(resultLength-1, 1);
+        step = (vec3_a.sub(vec3_b)).divideScalar(denominator);
+
+        var index;
+        result = [];
+        for (index = 0; index < resultLength; ++index)
+        {
+            var pos = new THREE.Vector3();
+            pos.copy(vec3_current);
+            result[index] = pos;
+            vec3_current.sub(step);
+        }
+
+        return result;
     }
 
  
