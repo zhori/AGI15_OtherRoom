@@ -186,7 +186,7 @@
     
     var i;
     for (i = 0; i < targetFaces.length; ++i){
-        // Get copy the defining vertices for the current face
+        // Get copy of the defining vertices for the current face
         var face = targetFaces[i],
             vec3_a = targetVertices[face.a],
             vec3_b = targetVertices[face.b],
@@ -200,14 +200,18 @@
         particles.vertices.push(new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z));
         particles.vertices.push(new THREE.Vector3(vec3_c.x, vec3_c.y, vec3_c.z));
 
-        var edgeAB = interpolate(vec3_a, vec3_b, 10),
-            edgeAC = interpolate(vec3_a, vec3_c, 10);
+        var pointSize = 50,
+            edgeAB = interpolate(vec3_a, vec3_b, pointSize),
+            edgeAC = interpolate(vec3_a, vec3_c, pointSize);
 
         var j;
         for(j = 0; j < edgeAB.length; ++j){
             particles.vertices.push(new THREE.Vector3(edgeAB[j].x, edgeAB[j].y, edgeAB[j].z));
+        }
+        for(j = 0; j < edgeAC.length; ++j){
             particles.vertices.push(new THREE.Vector3(edgeAC[j].x, edgeAC[j].y, edgeAC[j].z));
         }
+
 
 
 
@@ -222,28 +226,30 @@
     scene.add(particleSystem);
     }
 
-    function interpolate(vec3_a, vec3_b, resultLength){
+    function interpolate(vec3_a, vec3_b, pointSize){
 
-        var vec3_current, denominator, step, result;
+        var vec3_current, denominator, step, result, distance;
         
         // create copies of parameters
         vec3_current = new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z);
         vec3_a = new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z);
         vec3_b = new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z);
 
+        distance = vec3_a.distanceTo(vec3_b);
+        resultLength = distance/pointSize;
+
         denominator = Math.max(resultLength-1, 1);
         step = (vec3_a.sub(vec3_b)).divideScalar(denominator);
 
         var index;
         result = [];
-        for (index = 0; index < resultLength; ++index)
+        for (index = 0; index < denominator; ++index)
         {
             var pos = new THREE.Vector3();
             pos.copy(vec3_current);
             result[index] = pos;
             vec3_current.sub(step);
         }
-
         return result;
     }
 
