@@ -235,6 +235,7 @@
 
         color: { type: "c", value: new THREE.Color( 0x00ff00 ) },
         alpha: { type: "f", value: 1.0 },
+        texture:{ type: "t", value: THREE.ImageUtils.loadTexture( "Images/dot.png" ) }
 
     };
 
@@ -244,6 +245,10 @@
         uniforms:       uniforms,
         vertexShader:   document.getElementById( 'vertexshader' ).textContent,
         fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+
+        //blending:       THREE.AdditiveBlending,
+        alphaTest: 0.5,
+        //depthTest: false,
         transparent:    true
 
     });

@@ -39,17 +39,20 @@
 
 		    uniform vec3 color;
 		    uniform float alpha;
+		    uniform sampler2D texture;
 
 		    void main() {
 
-		        gl_FragColor = vec4( color, alpha );
+		        vec4 outColor = texture2D( texture, gl_PointCoord );
+				if ( outColor.a < 0.5 ) discard;
+				gl_FragColor = outColor;
 
 		    }
 
 		</script>
 
 
-		
+
 		<script src="js/otherRoom.js"></script>
 
 
