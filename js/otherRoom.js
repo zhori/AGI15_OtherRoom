@@ -173,7 +173,8 @@
     var targetVertices = target.geometry.vertices;
 
     // create the particle variables
-    var particles = new THREE.Geometry();
+    var particleGeometry = new THREE.BufferGeometry(),
+        particleVectors = [];
 
     for (var i = 0; i < targetFaces.length; ++i){
         // Get copy of the defining vertices for the current face
@@ -197,28 +198,37 @@
         var inverseDensity = 320,
             nPoints = area/inverseDensity;
 
-        var j;
-        for(j = 0; j < nPoints; ++j){
+        for(var j = 0; j < nPoints; ++j){
             var point = fill(vec3_a, vec3_b, vec3_c);
-
-        particles.vertices.push(new THREE.Vector3(point.x, point.y, point.z));
+            particleVectors.push(new THREE.Vector3(point.x, point.y, point.z));
         }
 
     }
 
-    // ADD MATERIAL
-     // add an attribute
-    numVertices = particles.attributes.position.count;
-    var sizes = new Float32Array( numVertices * 1 ); // 1 values per vertex
+    // add all particle attributes to the BufferGeometry
+    var nParticles = particleVectors.length;
+    var positions = new Float32Array( nParticles * 3 );
+    var colors = new Float32Array( nParticles * 3 );
+    var sizes = new Float32Array( nParticles );
 
-    for( var i = 0; i < numVertices; i ++ ) {
-    
-        // set size randomly
-        sizes[ i ] = Math.random()*64;
+    for(var i = 0, i3 = 0; i < nParticles; ++i, i3 += 3){
 
+        positions[ i3 + 0 ] = particleVectors[i].x;
+        positions[ i3 + 1 ] = particleVectors[i].y;
+        positions[ i3 + 2 ] = particleVectors[i].z;
+
+        // color.setHSL( i / nParticles, 1.0, 0.5 );
+
+        // colors[ i3 + 0 ] = color.r;
+        // colors[ i3 + 1 ] = color.g;
+        // colors[ i3 + 2 ] = color.b;
+
+        sizes[ i ] = Math.random()*20;
     }
- 
-    particles.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+
+    particleGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+    //geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
+    particleGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
 
     // uniforms
     uniforms = {
@@ -240,7 +250,7 @@
 
     // create the particle system
     var particleSystem = new THREE.Points(
-        particles,
+        particleGeometry,
         shaderMaterial);
 
     // add it to the scene
