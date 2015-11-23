@@ -169,18 +169,19 @@
 
     function artisticRendering (target) {
 
-    console.log(target);
-    console.log(target.geometry.faces);
-
     var targetFaces = target.geometry.faces;
     var targetVertices = target.geometry.vertices;
 
     // create the particle variables
-    var particleCount = 1800,
-        particles = new THREE.Geometry(),
+    var particles = new THREE.Geometry(),
         pMaterial = new THREE.PointsMaterial({
           color: 0xFFFFFF,
-          size: 20
+          size: 16,
+          sizeAttenuation: false,
+          map: THREE.ImageUtils.loadTexture("Images/dot.png"),
+          alphaTest: 0.5,
+          //blending: THREE.AdditiveBlending,
+          transparent: true
         });
 
     
@@ -204,7 +205,7 @@
         var s = (ABdist + ACdist + BCdist)/2; //half triangle perimeter
         var area = Math.sqrt(s*(s-ABdist)*(s-ACdist)*(s-BCdist));
 
-        var inverseDensity = 160,
+        var inverseDensity = 320,
             nPoints = area/inverseDensity;
 
         var j;
