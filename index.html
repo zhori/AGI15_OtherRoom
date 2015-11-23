@@ -18,6 +18,35 @@
 		<script src="js/loaders/OBJMTLLoader.js"></script>
 		<script src="js/otherRoom.js"></script>
 
+		<script type="x-shader/x-vertex" id="vertexshader">
+
+	    attribute float size;
+
+	    void main() {
+
+	        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+	        gl_PointSize = size;
+
+	        gl_Position = projectionMatrix * mvPosition;
+
+    	}
+
+		</script>
+
+		<script type="x-shader/x-fragment" id="fragmentshader">
+
+		    uniform vec3 color;
+		    uniform float alpha;
+
+		    void main() {
+
+		        gl_FragColor = vec4( color, alpha );
+
+		    }
+
+		</script>
+
 
 	</body>
 </html>

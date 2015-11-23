@@ -173,20 +173,9 @@
     var targetVertices = target.geometry.vertices;
 
     // create the particle variables
-    var particles = new THREE.Geometry(),
-        pMaterial = new THREE.PointsMaterial({
-          color: 0xFFFFFF,
-          size: 16,
-          sizeAttenuation: false,
-          map: THREE.ImageUtils.loadTexture("Images/dot.png"),
-          alphaTest: 0.5,
-          //blending: THREE.AdditiveBlending,
-          transparent: true
-        });
+    var particles = new THREE.Geometry();
 
-    
-    var i;
-    for (i = 0; i < targetFaces.length; ++i){
+    for (var i = 0; i < targetFaces.length; ++i){
         // Get copy of the defining vertices for the current face
         var face = targetFaces[i],
             vec3_a = targetVertices[face.a],
@@ -217,10 +206,42 @@
 
     }
 
+    // ADD MATERIAL
+     // add an attribute
+    numVertices = particles.attributes.position.count;
+    var sizes = new Float32Array( numVertices * 1 ); // 1 values per vertex
+
+    for( var i = 0; i < numVertices; i ++ ) {
+    
+        // set size randomly
+        sizes[ i ] = Math.random()*64;
+
+    }
+ 
+    particles.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+
+    // uniforms
+    uniforms = {
+
+        color: { type: "c", value: new THREE.Color( 0x00ff00 ) },
+        alpha: { type: "f", value: 1.0 },
+
+    };
+
+    // point cloud material
+    var shaderMaterial = new THREE.ShaderMaterial( {
+
+        uniforms:       uniforms,
+        vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+        fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+        transparent:    true
+
+    });
+
     // create the particle system
     var particleSystem = new THREE.Points(
         particles,
-        pMaterial);
+        shaderMaterial);
 
     // add it to the scene
     scene.add(particleSystem);
