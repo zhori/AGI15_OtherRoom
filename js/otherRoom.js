@@ -196,8 +196,19 @@
         vec3_b = new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z);
         vec3_c = new THREE.Vector3(vec3_c.x, vec3_c.y, vec3_c.z);
 
+        // Calculate area of the triangular face using Herons formula
+        var ABdist = vec3_a.distanceTo(vec3_b),
+            ACdist = vec3_a.distanceTo(vec3_c),
+            BCdist = vec3_b.distanceTo(vec3_c);
+
+        var s = (ABdist + ACdist + BCdist)/2; //half triangle perimeter
+        var area = Math.sqrt(s*(s-ABdist)*(s-ACdist)*(s-BCdist));
+
+        var inverseDensity = 160,
+            nPoints = area/inverseDensity;
+
         var j;
-        for(j = 0; j < 2000; ++j){
+        for(j = 0; j < nPoints; ++j){
             var point = fill(vec3_a, vec3_b, vec3_c);
 
         particles.vertices.push(new THREE.Vector3(point.x, point.y, point.z));
@@ -215,6 +226,7 @@
     }
 
     function fill(vec3A, vec3B, vec3C){
+        // Use Barycentric coordinates to get random points within the triangle
 
         // create vectors A to B and A to C
         var vec3AB = new THREE.Vector3(vec3A.x - vec3B.x,vec3A.y - vec3B.y,vec3A.z - vec3B.z),
