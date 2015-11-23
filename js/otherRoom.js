@@ -196,21 +196,28 @@
         vec3_b = new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z);
         vec3_c = new THREE.Vector3(vec3_c.x, vec3_c.y, vec3_c.z);
 
-        particles.vertices.push(new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z));
-        particles.vertices.push(new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z));
-        particles.vertices.push(new THREE.Vector3(vec3_c.x, vec3_c.y, vec3_c.z));
-
-        var pointSize = 50,
-            edgeAB = interpolate(vec3_a, vec3_b, pointSize),
-            edgeAC = interpolate(vec3_a, vec3_c, pointSize);
-
         var j;
-        for(j = 0; j < edgeAB.length; ++j){
-            particles.vertices.push(new THREE.Vector3(edgeAB[j].x, edgeAB[j].y, edgeAB[j].z));
-        }
-        for(j = 0; j < edgeAC.length; ++j){
-            particles.vertices.push(new THREE.Vector3(edgeAC[j].x, edgeAC[j].y, edgeAC[j].z));
-        }
+        for(j = 0; j < 2000; ++j){
+            var point = fill(vec3_a, vec3_b, vec3_c);
+
+        particles.vertices.push(new THREE.Vector3(point.x, point.y, point.z));
+    }
+
+        //particles.vertices.push(new THREE.Vector3(vec3_a.x, vec3_a.y, vec3_a.z));
+        //particles.vertices.push(new THREE.Vector3(vec3_b.x, vec3_b.y, vec3_b.z));
+        //particles.vertices.push(new THREE.Vector3(vec3_c.x, vec3_c.y, vec3_c.z));
+
+        // var pointSize = 50,
+        //     edgeAB = interpolate(vec3_a, vec3_b, pointSize),
+        //     edgeAC = interpolate(vec3_a, vec3_c, pointSize);
+
+        // var j;
+        // for(j = 0; j < edgeAB.length; ++j){
+        //     particles.vertices.push(new THREE.Vector3(edgeAB[j].x, edgeAB[j].y, edgeAB[j].z));
+        // }
+        // for(j = 0; j < edgeAC.length; ++j){
+        //     particles.vertices.push(new THREE.Vector3(edgeAC[j].x, edgeAC[j].y, edgeAC[j].z));
+        //}
 
 
 
@@ -251,6 +258,33 @@
             vec3_current.sub(step);
         }
         return result;
+    }
+
+    function fill(vec3A, vec3B, vec3C){
+
+        // create vectors A to B and A to C
+        var vec3AB = new THREE.Vector3(vec3A.x - vec3B.x,vec3A.y - vec3B.y,vec3A.z - vec3B.z),
+            vec3AC = new THREE.Vector3(vec3A.x - vec3C.x,vec3A.y - vec3C.y,vec3A.z - vec3C.z);
+
+        var R = Math.random(),
+            S = Math.random();
+
+        if((R + S) > 1){
+            R = 1 - R;
+            S = 1- S;
+        }
+
+        var randomPoint = new THREE.Vector3(vec3A.x, vec3A.y, vec3A.z),
+            vec3ABpart = new THREE.Vector3(vec3AB.x,vec3AB.y,vec3AB.z),
+            vec3ACpart = new THREE.Vector3(vec3AC.x,vec3AC.y,vec3AC.z);
+
+        vec3ABpart.multiplyScalar(R);
+        vec3ACpart.multiplyScalar(S);
+
+        randomPoint.sub(vec3ABpart);
+        randomPoint.sub(vec3ACpart);
+
+        return randomPoint;
     }
 
  
