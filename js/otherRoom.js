@@ -1,5 +1,5 @@
     var scene, camera, renderer, controls;
-    var geometry, material, mesh;
+    var geometry, material, mesh, meshFire;
 
 
     init();
@@ -146,11 +146,8 @@
 
     function animate() {
 
-
-      //meshCube.material = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe:true });
-
-
         requestAnimationFrame( animate );
+        /* Test Cube Animate + Colors */
         if(meter != null){
 
             if (meter.checkClipping() && recentclip == 0 ){
@@ -165,6 +162,14 @@
             meshCube.rotation.x += meter.volume/2;
             meshCube.rotation.y += meter.volume/2;
         }
+        /* End of Test Cube Animate + Colors */
+
+        /* FIRE Animate() */
+        if(meshFire){
+            meshFire.rotation.y += 0.01;
+        }
+        
+        /* End of FIRE Animate() */
 
         controls.update() // update the OrbitControls
 
