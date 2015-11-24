@@ -105,14 +105,14 @@
         imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
         imgTexture.anisotropy = 16;
         var shininess = 50, shading = THREE.SmoothShading;
-        materialPlane2 = new THREE.MeshBasicMaterial( { 
-            map: imgTexture, 
+        materialPlane2 = new THREE.MeshBasicMaterial( {
+            map: imgTexture,
             shininess: shininess,
-            shading: shading 
+            shading: shading
         } );
 
         meshPlane = new THREE.Mesh(geometryPlane, materialPlane2);
-        
+
         meshPlane.position.y = -2700;
         scene.add(meshPlane);
 
@@ -131,6 +131,7 @@
         controls.keyPanSpeed = 50.0;
 
         window.addEventListener( 'resize', onWindowResize, false );
+
 
 
     }
@@ -159,16 +160,15 @@
               recentclip = 0;
             }
 
-            meshCube.rotation.x += meter.volume/2;
-            meshCube.rotation.y += meter.volume/2;
+            //meshCube.rotation.x += meter.volume/2;
+            //meshCube.rotation.y += meter.volume/2;
         }
         /* End of Test Cube Animate + Colors */
 
         /* FIRE Animate() */
-        if(meshFire){
-            meshFire.rotation.y += 0.01;
+        if(meshFire != null){
+            fireAnimate();
         }
-        
         /* End of FIRE Animate() */
 
         controls.update() // update the OrbitControls
@@ -177,5 +177,5 @@
 
     }
 
- 
+
 
