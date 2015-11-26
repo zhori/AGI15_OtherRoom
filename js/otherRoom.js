@@ -91,12 +91,12 @@
         }, onProgress, onError );
 
         // add Icosahedron to the scene
-        geometryIco  = new THREE.IcosahedronGeometry( 200, 1 );
+        geometryIco  = new THREE.TorusGeometry( 10, 3, 16, 100 );
 
         var meshIco = THREE.SceneUtils.createMultiMaterialObject( geometryIco, [
 
         new THREE.MeshLambertMaterial( { color: 0xffffff} ),
-        new THREE.MeshBasicMaterial( { color: 0x222222, wireframe: true} )
+        new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: false} )
 
         ]);
 
@@ -104,7 +104,6 @@
         scene.add(meshIco);
 
         // add artistic render effect
-        console.log(meshIco);
         artisticRendering(meshIco.children[0]);
 
 
@@ -117,7 +116,6 @@
         
         meshPlane.position.y = -2700;
         scene.add(meshPlane);
-
         
 
         renderer = new THREE.WebGLRenderer();
@@ -178,12 +176,15 @@
 
     function artisticRendering (target) {
 
+    console.log(target);
+
     var targetFaces = target.geometry.faces;
     var targetVertices = target.geometry.vertices;
 
     // create the particle variables
     var particleGeometry = new THREE.BufferGeometry(),
-        particleVectors = [];
+        particleVectors = [],
+        particleNormals = [];
 
     for (var i = 0; i < targetFaces.length; ++i){
         // Get copy of the defining vertices for the current face
@@ -204,12 +205,13 @@
         var s = (ABdist + ACdist + BCdist)/2; //half triangle perimeter
         var area = Math.sqrt(s*(s-ABdist)*(s-ACdist)*(s-BCdist));
 
-        var inverseDensity = 320,
+        var inverseDensity = 80,
             nPoints = area/inverseDensity;
 
         for(var j = 0; j < nPoints; ++j){
             var point = fill(vec3_a, vec3_b, vec3_c);
             particleVectors.push(new THREE.Vector3(point.x, point.y, point.z));
+            particleNormals.push(new THREE.Vector3(face.normal.x, face.normal.y, face.normal.z));
         }
 
     }
@@ -220,19 +222,19 @@
     var colors = new Float32Array( nParticles * 3 );
     var sizes = new Float32Array( nParticles );
 
+    // generate camera view vector (direction only)
+    var viewVector = new THREE.Vector3( 0, 0, -1 );
+    viewVector.applyQuaternion( camera.quaternion );
+
     for(var i = 0, i3 = 0; i < nParticles; ++i, i3 += 3){
 
         positions[ i3 + 0 ] = particleVectors[i].x;
         positions[ i3 + 1 ] = particleVectors[i].y;
         positions[ i3 + 2 ] = particleVectors[i].z;
 
-        // color.setHSL( i / nParticles, 1.0, 0.5 );
-
-        // colors[ i3 + 0 ] = color.r;
-        // colors[ i3 + 1 ] = color.g;
-        // colors[ i3 + 2 ] = color.b;
-
-        sizes[ i ] = Math.random()*20;
+        // change size depending on the view vector and the particle normal
+        var scaleFactor = 1 - Math.abs(particleNormals[i].dot(viewVector));
+        sizes[ i ] = 30*scaleFactor;
     }
 
     particleGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
