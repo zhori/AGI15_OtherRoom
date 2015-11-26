@@ -90,12 +90,23 @@
 
         }, onProgress, onError );
 
-        // add simple cube in the middle of the scene that reacts to sound
-        geometryCube = new THREE.BoxGeometry(800 , 800, 800);
-        materialCube = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true });
+        // add Icosahedron to the scene
+        geometryIco  = new THREE.IcosahedronGeometry( 200, 1 );
 
-        meshCube = new THREE.Mesh(geometryCube, materialCube);
-        scene.add(meshCube);
+        var meshIco = THREE.SceneUtils.createMultiMaterialObject( geometryIco, [
+
+        new THREE.MeshLambertMaterial( { color: 0xffffff} ),
+        new THREE.MeshBasicMaterial( { color: 0x222222, wireframe: true} )
+
+        ]);
+
+
+        scene.add(meshIco);
+
+        // add artistic render effect
+        console.log(meshIco);
+        artisticRendering(meshIco.children[0]);
+
 
         //add green grass plane
 
@@ -107,9 +118,7 @@
         meshPlane.position.y = -2700;
         scene.add(meshPlane);
 
-        // add artistic render effect
-        artisticRendering(meshCube);
-
+        
 
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
