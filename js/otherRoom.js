@@ -90,6 +90,38 @@
 
         }, onProgress, onError );
 
+       // Model of bridge
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round(percentComplete, 2) + '% downloaded' );
+            }
+        };
+
+        var onError = function ( xhr ) {
+        };
+
+
+        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+
+        var loader = new THREE.OBJMTLLoader();
+        loader.load( 'model/bridge.obj', 'model/bridge.mtl', function ( object ) {
+
+            object.position.x = -2000;
+            object.position.y = -2700;
+            object.position.z = -2000;
+            object.rotation.y = -90;
+            object.scale.x = 75;
+            object.scale.y = 75;
+            object.scale.z = 75;
+            obj = object
+            scene.add( obj );
+
+        }, onProgress, onError );
+
+
+
         // add simple cube in the middle of the scene that reacts to sound
         geometryCube = new THREE.BoxGeometry(800 , 800, 800);
         materialCube = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true });
@@ -100,8 +132,12 @@
         //add green grass plane
 
         geometryPlane1 = new THREE.BoxGeometry(100000,50,100000);
-        materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
-        //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        //materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
+        var imgTexture1 = THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        materialPlane1 = new THREE.MeshBasicMaterial({
+          map: imgTexture1,
+
+        });
         meshPlane1 = new THREE.Mesh(geometryPlane1, materialPlane1);
 
         meshPlane1.position.x = 50000;
@@ -110,8 +146,12 @@
         scene.add(meshPlane1);
 
         geometryPlane2 = new THREE.BoxGeometry(100000,50,100000);
-        materialPlane2 = new THREE.MeshPhongMaterial({color: 'green' });
-        //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        //materialPlane2 = new THREE.MeshPhongMaterial({color: 'green' });
+        var imgTexture2 = THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        materialPlane2 = new THREE.MeshBasicMaterial({
+          map: imgTexture2,
+
+        });
         meshPlane2 = new THREE.Mesh(geometryPlane2, materialPlane2);
 
         meshPlane2.position.x = -55000;
@@ -119,8 +159,8 @@
         meshPlane2.position.z = -45000;
         scene.add(meshPlane2);
 
-        waterPlane = new THREE.BoxGeometry(100000,10,100000);
-        materialWater = new THREE.MeshPhongMaterial({color: 'blue' });
+        waterPlane = new THREE.BoxGeometry(25000,10,100000);
+        materialWater = new THREE.MeshBasicMaterial({color: '#13BFE3' });
         //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
         waterMesh = new THREE.Mesh(waterPlane, materialWater);
 
