@@ -99,13 +99,38 @@
 
         //add green grass plane
 
-        geometryPlane = new THREE.BoxGeometry(10000,300,10000);
-        materialPlane = new THREE.MeshPhongMaterial({color: 0x99FF33 });
+        geometryPlane1 = new THREE.BoxGeometry(100000,50,100000);
+        materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
         //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
-        meshPlane = new THREE.Mesh(geometryPlane, materialPlane);
-        
-        meshPlane.position.y = -2700;
-        scene.add(meshPlane);
+        meshPlane1 = new THREE.Mesh(geometryPlane1, materialPlane1);
+
+        meshPlane1.position.x = 50000;
+        meshPlane1.position.y = -2700;
+        meshPlane1.position.z = -45000;
+        scene.add(meshPlane1);
+
+        geometryPlane2 = new THREE.BoxGeometry(100000,50,100000);
+        materialPlane2 = new THREE.MeshPhongMaterial({color: 'green' });
+        //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        meshPlane2 = new THREE.Mesh(geometryPlane2, materialPlane2);
+
+        meshPlane2.position.x = -55000;
+        meshPlane2.position.y = -2700;
+        meshPlane2.position.z = -45000;
+        scene.add(meshPlane2);
+
+        waterPlane = new THREE.BoxGeometry(100000,10,100000);
+        materialWater = new THREE.MeshPhongMaterial({color: 'blue' });
+        //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        waterMesh = new THREE.Mesh(waterPlane, materialWater);
+
+        waterMesh.position.y = -2800;
+        waterMesh.position.z = -45000;
+        scene.add(waterMesh);
+
+
+
+
 
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -163,5 +188,5 @@
 
     }
 
- 
+
 
