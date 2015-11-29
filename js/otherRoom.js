@@ -27,13 +27,6 @@
             urlPrefix + "posy.jpg", urlPrefix + "negy.jpg",
             urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
 
-        // var urlPrefix   = "Images/skycartoon/";
-        // var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
-        //     urlPrefix + "posy.png", urlPrefix + "negy.png",
-        //     urlPrefix + "posz.png", urlPrefix + "negz.png" ];
-
-
-
         var reflectionCube = THREE.ImageUtils.loadTextureCube( urls );
         reflectionCube.format = THREE.RGBFormat;
 
@@ -95,8 +88,8 @@
 
         var meshIco = THREE.SceneUtils.createMultiMaterialObject( geometryIco, [
 
-        new THREE.MeshLambertMaterial( { color: 0x0080ff} ),
-        new THREE.MeshBasicMaterial( { color: 0x0080ff, wireframe: true} )
+        new THREE.MeshLambertMaterial( { color: 0x0080ff, wireframe: false} ),
+        new THREE.MeshBasicMaterial( { color: 0x0080ff, wireframe: false} )
 
         ]);
 
@@ -207,7 +200,7 @@
         var s = (ABdist + ACdist + BCdist)/2; //half triangle perimeter
         var area = Math.sqrt(s*(s-ABdist)*(s-ACdist)*(s-BCdist));
 
-        var inverseDensity = 0.01,
+        var inverseDensity = 0.1,
             nPoints = area/inverseDensity;
 
         for(var j = 0; j < nPoints; ++j){
@@ -243,7 +236,11 @@
         colors[ i3 + 1 ] = particleColors[i].y;
         colors[ i3 + 2 ] = particleColors[i].z;
 
-        sizes[ i ] = 30*scaleFactor * Math.random();
+        sizes[ i ] = 20*scaleFactor * Math.random();
+        if(scaleFactor < 0.7)
+            scaleFactor = 0;
+        else
+            scaleFactor = 1;
         alphas[ i ] = scaleFactor;
     }
 
