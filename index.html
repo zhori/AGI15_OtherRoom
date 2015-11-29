@@ -21,9 +21,18 @@
 				<script type="x-shader/x-vertex" id="vertexshader">
 
 	    attribute float size;
+	    attribute vec3 customColor;
+	    attribute float customAlpha;
+
+	    varying vec3 vColor;
+	    varying float vAlpha;
 
 
 	    void main() {
+
+	    	vColor = customColor;
+	    	vAlpha = customAlpha;
+
 
 	        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
 
@@ -41,11 +50,15 @@
 		    uniform float alpha;
 		    uniform sampler2D texture;
 
+		    varying vec3 vColor;
+		    varying float vAlpha;
+
 		    void main() {
 
 		        vec4 outColor = texture2D( texture, gl_PointCoord );
 				if ( outColor.a < 0.5 ) discard;
-				gl_FragColor = outColor;
+				gl_FragColor = outColor * vec4(vColor, vAlpha);
+				gl_FragColor.a = vAlpha;
 
 		    }
 

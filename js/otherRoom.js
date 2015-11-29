@@ -95,8 +95,8 @@
 
         var meshIco = THREE.SceneUtils.createMultiMaterialObject( geometryIco, [
 
-        new THREE.MeshLambertMaterial( { color: 0xffffff} ),
-        new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: false} )
+        new THREE.MeshLambertMaterial( { color: 0x0080ff} ),
+        new THREE.MeshBasicMaterial( { color: 0x0080ff, wireframe: true} )
 
         ]);
 
@@ -180,11 +180,13 @@
 
     var targetFaces = target.geometry.faces;
     var targetVertices = target.geometry.vertices;
+    var targetMaterialColor = target.material.color;
 
     // create the particle variables
     var particleGeometry = new THREE.BufferGeometry(),
         particleVectors = [],
-        particleNormals = [];
+        particleNormals = [],
+        particleColors = [];
 
     for (var i = 0; i < targetFaces.length; ++i){
         // Get copy of the defining vertices for the current face
@@ -205,13 +207,14 @@
         var s = (ABdist + ACdist + BCdist)/2; //half triangle perimeter
         var area = Math.sqrt(s*(s-ABdist)*(s-ACdist)*(s-BCdist));
 
-        var inverseDensity = 80,
+        var inverseDensity = 0.01,
             nPoints = area/inverseDensity;
 
         for(var j = 0; j < nPoints; ++j){
             var point = fill(vec3_a, vec3_b, vec3_c);
             particleVectors.push(new THREE.Vector3(point.x, point.y, point.z));
             particleNormals.push(new THREE.Vector3(face.normal.x, face.normal.y, face.normal.z));
+            particleColors.push(new THREE.Vector3(targetMaterialColor.r, targetMaterialColor.g, targetMaterialColor.b));
         }
 
     }
@@ -221,6 +224,7 @@
     var positions = new Float32Array( nParticles * 3 );
     var colors = new Float32Array( nParticles * 3 );
     var sizes = new Float32Array( nParticles );
+    var alphas = new Float32Array( nParticles );
 
     // generate camera view vector (direction only)
     var viewVector = new THREE.Vector3( 0, 0, -1 );
@@ -232,14 +236,23 @@
         positions[ i3 + 1 ] = particleVectors[i].y;
         positions[ i3 + 2 ] = particleVectors[i].z;
 
-        // change size depending on the view vector and the particle normal
+        // scale color and size depending on the view vector and the particle normal
         var scaleFactor = 1 - Math.abs(particleNormals[i].dot(viewVector));
-        sizes[ i ] = 30*scaleFactor;
+
+        colors[ i3 + 0 ] = particleColors[i].x;
+        colors[ i3 + 1 ] = particleColors[i].y;
+        colors[ i3 + 2 ] = particleColors[i].z;
+
+        sizes[ i ] = 30*scaleFactor * Math.random();
+        alphas[ i ] = scaleFactor;
     }
 
+    console.log(colors);
+
     particleGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-    //geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
+    particleGeometry.addAttribute( 'customColor', new THREE.BufferAttribute( colors, 3 ) );
     particleGeometry.addAttribute( 'size', new THREE.BufferAttribute( sizes, 1 ) );
+    particleGeometry.addAttribute( 'customAlpha', new THREE.BufferAttribute( alphas, 1 ) );
 
     // uniforms
     uniforms = {
