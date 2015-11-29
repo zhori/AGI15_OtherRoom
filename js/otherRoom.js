@@ -84,15 +84,14 @@
         }, onProgress, onError );
 
         // add Icosahedron to the scene
-        geometryIco  = new THREE.TorusGeometry( 10, 3, 16, 100 );
+        geometryIco  = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
 
         var meshIco = THREE.SceneUtils.createMultiMaterialObject( geometryIco, [
 
-        new THREE.MeshLambertMaterial( { color: 0x0080ff, wireframe: false} ),
-        new THREE.MeshBasicMaterial( { color: 0x0080ff, wireframe: false} )
+        new THREE.MeshLambertMaterial( { color: 0x58d3f7, wireframe: false} ),
+        new THREE.MeshBasicMaterial( { color: 0xffffff, wireframe: true} )
 
         ]);
-
 
         scene.add(meshIco);
 
@@ -200,7 +199,7 @@
         var s = (ABdist + ACdist + BCdist)/2; //half triangle perimeter
         var area = Math.sqrt(s*(s-ABdist)*(s-ACdist)*(s-BCdist));
 
-        var inverseDensity = 0.1,
+        var inverseDensity = 0.01,
             nPoints = area/inverseDensity;
 
         for(var j = 0; j < nPoints; ++j){
@@ -232,16 +231,16 @@
         // scale color and size depending on the view vector and the particle normal
         var scaleFactor = 1 - Math.abs(particleNormals[i].dot(viewVector));
 
-        colors[ i3 + 0 ] = particleColors[i].x;
-        colors[ i3 + 1 ] = particleColors[i].y;
-        colors[ i3 + 2 ] = particleColors[i].z;
+        colors[ i3 + 0 ] = particleColors[i].x * Math.random();
+        colors[ i3 + 1 ] = particleColors[i].y * 1;
+        colors[ i3 + 2 ] = particleColors[i].z * Math.random();
 
-        sizes[ i ] = 20*scaleFactor * Math.random();
-        if(scaleFactor < 0.7)
-            scaleFactor = 0;
-        else
-            scaleFactor = 1;
-        alphas[ i ] = scaleFactor;
+        sizes[ i ] = 90*scaleFactor;// * Math.random();
+        // if(scaleFactor < 0.7)
+        //     scaleFactor = 0;
+        // else
+        //     scaleFactor = 1;
+        alphas[ i ] = 1;
     }
 
     console.log(colors);
@@ -267,7 +266,7 @@
         vertexShader:   document.getElementById( 'vertexshader' ).textContent,
         fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
 
-        //blending:       THREE.AdditiveBlending,
+        blending:       THREE.AdditiveBlending,
         alphaTest: 0.5,
         //depthTest: false,
         transparent:    true

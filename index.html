@@ -57,9 +57,7 @@
 
 		        vec4 outColor = texture2D( texture, gl_PointCoord );
 				if ( outColor.a < 0.5 ) discard;
-				gl_FragColor = outColor * vec4(vColor, vAlpha);
-				if (gl_FragColor. a < 0.8) discard;
-				gl_FragColor.a = vAlpha;
+				gl_FragColor = outColor; // * vec4(vColor, vAlpha);
 
 		    }
 
