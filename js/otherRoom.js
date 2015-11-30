@@ -3,8 +3,8 @@
 
     var grassMaterial, grassGeometry, grassMeshes = [],grassMeshes2 = [];
 
-		var grassHeight = 5, grassWidth = 2;
-		var grassCount = 10000;
+		var grassHeight = 4, grassWidth = 2;
+		var grassCount = 2500;
 		var clock = new THREE.Clock();
 
     init();
@@ -154,7 +154,7 @@
         scene.add(meshPlane1);
 
         //grassGeometry
-        grassGeometry = new THREE.PlaneGeometry( 1000, 1000, grassWidth - 1, grassHeight - 1 );
+        grassGeometry = new THREE.PlaneGeometry( 2500, 2500, grassWidth - 1, grassHeight - 1 );
 				grassGeometry.dynamic = true;
 				grassGeometry.vertices[ 3 ].z = 1;
 
@@ -166,12 +166,12 @@
 
       	for ( var i = 0, l = grassCount; i < l; i++ ) {
 					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
-					grassMeshes[i].position.x = Math.random() * 25000 - 12500;
-					grassMeshes[i].position.z = Math.random() * 25000 - 12500;
+					grassMeshes[i].position.x = Math.random() * 24000 - 12000;
+					grassMeshes[i].position.z = Math.random() * 24000 - 12000;
 					grassMeshes[i].rotation.y = Math.random() * Math.PI;
           grassMeshes[i].position.x += 9500;
-          grassMeshes[i].position.y += -2200;
-          grassMeshes[i].position.z += -9000;
+          grassMeshes[i].position.y += -1600;
+          grassMeshes[i].position.z += -8900;
 
 					scene.add( grassMeshes[i] );
 				}
@@ -192,12 +192,12 @@
 
         for ( var i = grassCount, l = grassCount*2; i < l; i++ ) {
 					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
-					grassMeshes[i].position.x = Math.random() * 25000 - 12500;
-					grassMeshes[i].position.z = Math.random() * 25000 - 12500;
+					grassMeshes[i].position.x = Math.random() * 24000 - 12000;
+					grassMeshes[i].position.z = Math.random() * 24000 - 12000;
 					grassMeshes[i].rotation.y = Math.random() * Math.PI;
           grassMeshes[i].position.x += -20500;
-          grassMeshes[i].position.y += -2200;
-          grassMeshes[i].position.z += -9000;
+          grassMeshes[i].position.y += -1600;
+          grassMeshes[i].position.z += -8900;
 
 					scene.add( grassMeshes[i] );
 				}
