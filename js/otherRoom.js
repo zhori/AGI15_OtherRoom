@@ -1,11 +1,13 @@
     var scene, camera, renderer, controls;
     var geometry, material, mesh;
 
-    var grassMaterial, grassGeometry, grassMeshes = [],grassMeshes2 = [];
+    var grassMaterial, grassGeometry, grassMeshes = [], grassMeshes2 = [];
 
 		var grassHeight = 4, grassWidth = 2;
 		var grassCount = 2500;
 		var clock = new THREE.Clock();
+
+    var grassWiggler = 0;
 
     init();
     animate();
@@ -128,14 +130,6 @@
         }, onProgress, onError );
 
 
-
-        // add simple cube in the middle of the scene that reacts to sound
-        geometryCube = new THREE.BoxGeometry(800 , 800, 800);
-        materialCube = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true });
-
-        meshCube = new THREE.Mesh(geometryCube, materialCube);
-        scene.add(meshCube);
-
         //add green grass plane
 
         geometryPlane1 = new THREE.BoxGeometry(25000,50,25000);
@@ -243,42 +237,36 @@
     function animate() {
 
 
-      //meshCube.material = new THREE.MeshBasicMaterial({color: 0x0000ff, wireframe:true });
+      requestAnimationFrame( animate );
+      if(meter != null){
 
+        //Grassthingie animation
 
-        requestAnimationFrame( animate );
-        if(meter != null){
-
-            if (meter.checkClipping() && recentclip == 0 ){
-              meshCube.material = new THREE.MeshBasicMaterial({color: '#'+Math.floor(Math.random()*16777215).toString(16), wireframe:true });
-              recentclip = 1;
+        for ( var i = 0, il = grassGeometry.vertices.length / 2 - 1; i <= il; i ++ ) {
+          for ( var j = 0, jl = grassWidth, f = (il - i) / il; j < jl; j++ ) {
+            if(grassWiggler == 0){
+              grassGeometry.vertices[ jl * i + j ].z += 10*f + f * meter.volume * 30;
+              if (grassGeometry.vertices[ jl * i + j ].z > 950){
+              grassWiggler = 1;}}
+              else if(grassWiggler ==1){
+                grassGeometry.vertices[ jl * i + j ].z -= 10*f + f * meter.volume * 30;
+              if (grassGeometry.vertices[ jl * i + j ].z <-950){
+              grassWiggler = 0;}
+              console.log (grassGeometry.vertices[ jl * i + j ].z);
             }
-            else
-            {
-              recentclip = 0;
-            }
+          }
 
-            meshCube.rotation.x += meter.volume/2;
-            meshCube.rotation.y += meter.volume/2;
+          grassGeometry.verticesNeedUpdate = true;
+
         }
-
-      //Grassthingie
-      var delta = clock.getDelta(),
-					time = clock.getElapsedTime();
-
-				for ( var i = 0, il = grassGeometry.vertices.length / 2 - 1; i <= il; i ++ ) {
-					for ( var j = 0, jl = grassWidth, f = (il - i) / il; j < jl; j++ ) {
-						grassGeometry.vertices[ jl * i + j ].z = f * Math.sin(time) * 1000;
-					}
-				}
-
-				grassGeometry.verticesNeedUpdate = true;
+      }
 
         controls.update() // update the OrbitControls
 
         renderer.render( scene, camera );
 
-    }
+      }
+
 
 
 
