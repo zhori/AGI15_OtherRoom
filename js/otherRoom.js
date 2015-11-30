@@ -161,14 +161,20 @@
 
       	for ( var i = 0, l = grassCount; i < l; i++ ) {
 					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
-					grassMeshes[i].position.x = Math.random() * 24000 - 12000;
-					grassMeshes[i].position.z = Math.random() * 24000 - 12000;
-					grassMeshes[i].rotation.y = Math.random() * Math.PI;
-          grassMeshes[i].position.x += 9500;
-          grassMeshes[i].position.y += -1600;
-          grassMeshes[i].position.z += -8900;
+          var x = Math.random() * 24000 - 12000;
+          var z = Math.random() * 24000 - 12000;
+          if( (z < 7000 || z > 10000) || (x < -7000 || x > -4000) ){ //x < -7000 || x > -4000
+            grassMeshes[i].position.x = x;
+					  grassMeshes[i].position.z = z;
+					  grassMeshes[i].rotation.y = Math.random() * Math.PI;
+            grassMeshes[i].position.x += 9500;
+            grassMeshes[i].position.y += -1600;
+            grassMeshes[i].position.z += -8900;
+					  scene.add( grassMeshes[i] );
+          }
 
-					scene.add( grassMeshes[i] );
+
+
 				}
 
         geometryPlane2 = new THREE.BoxGeometry(25000,50,25000);

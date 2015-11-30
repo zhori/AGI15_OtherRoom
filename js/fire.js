@@ -6,7 +6,7 @@ meshFire = new THREE.Mesh(geometryFire, materialFire);
 scene.add(meshFire);
 
 meshFire.position.x = 4000;
-meshFire.position.y = -2000;
+meshFire.position.y = -2400;
 
 makeParticles();
 
