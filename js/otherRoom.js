@@ -1,5 +1,5 @@
     var scene, camera, renderer, controls;
-    var geometry, material, mesh;
+    var geometry, material, mesh, meshFire;
 
     var grassMaterial, grassGeometry, grassMeshes = [], grassMeshes2 = [];
 
@@ -23,7 +23,9 @@
         scene.add( ambient );
 
         var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+
         directionalLight.position.set( 0, 1, 1 ).normalize();
+
         scene.add( directionalLight );
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 400000 );
@@ -132,6 +134,7 @@
 
         //add green grass plane
 
+
         geometryPlane1 = new THREE.BoxGeometry(25000,50,25000);
         //materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
         var imgTexture1 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
@@ -205,7 +208,6 @@
         waterMesh.position.z = -7500;
         scene.add(waterMesh);
 
-
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.render( scene, camera );
@@ -221,6 +223,7 @@
         controls.keyPanSpeed = 50.0;
 
         window.addEventListener( 'resize', onWindowResize, false );
+
 
 
     }
@@ -252,7 +255,8 @@
                 grassGeometry.vertices[ jl * i + j ].z -= 10*f + f * meter.volume * 30;
               if (grassGeometry.vertices[ jl * i + j ].z <-950){
               grassWiggler = 0;}
-              console.log (grassGeometry.vertices[ jl * i + j ].z);
+              //console.log (grassGeometry.vertices[ jl * i + j ].z);
+
             }
           }
 
@@ -261,12 +265,18 @@
         }
       }
 
+        /* FIRE Animate() */
+        if(meshFire != null){
+            fireAnimate();
+        }
+        /* End of FIRE Animate() */
+
+
+
+
         controls.update() // update the OrbitControls
 
         renderer.render( scene, camera );
 
       }
-
-
-
 
