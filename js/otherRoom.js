@@ -108,7 +108,7 @@
         var loader = new THREE.OBJMTLLoader();
         loader.load( 'model/bridge.obj', 'model/bridge.mtl', function ( object ) {
 
-            object.position.x = -2000;
+            object.position.x = -5200;
             object.position.y = -2700;
             object.position.z = -2000;
             object.rotation.y = -90;
@@ -140,7 +140,7 @@
         });
         meshPlane1 = new THREE.Mesh(geometryPlane1, materialPlane1);
 
-        meshPlane1.position.x = 50000;
+        meshPlane1.position.x = 47000;
         meshPlane1.position.y = -2700;
         meshPlane1.position.z = -45000;
         scene.add(meshPlane1);
@@ -154,7 +154,7 @@
         });
         meshPlane2 = new THREE.Mesh(geometryPlane2, materialPlane2);
 
-        meshPlane2.position.x = -55000;
+        meshPlane2.position.x = -58000;
         meshPlane2.position.y = -2700;
         meshPlane2.position.z = -45000;
         scene.add(meshPlane2);
