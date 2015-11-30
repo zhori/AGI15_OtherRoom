@@ -1,6 +1,13 @@
     var scene, camera, renderer, controls;
     var geometry, material, mesh, meshFire;
 
+    var grassMaterial, grassGeometry, grassMeshes = [], grassMeshes2 = [];
+
+		var grassHeight = 4, grassWidth = 2;
+		var grassCount = 2500;
+		var clock = new THREE.Clock();
+
+    var grassWiggler = 0;
 
     init();
     animate();
@@ -9,12 +16,16 @@
 
         scene = new THREE.Scene();
 
+
+
         //light to make texture visible
         var ambient = new THREE.AmbientLight( 0x404040 );
         scene.add( ambient );
 
         var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-        directionalLight.position.set( 0, 0, 10000 ).normalize();
+
+        directionalLight.position.set( 0, 1, 1 ).normalize();
+
         scene.add( directionalLight );
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 400000 );
@@ -57,7 +68,7 @@
         } );
 
         skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 200000, 200000, 200000 ), material );
-
+        skyboxMesh.position.y = -20000;
         scene.add( skyboxMesh );
 
         // Model of window
@@ -90,31 +101,112 @@
 
         }, onProgress, onError );
 
-        // add simple cube in the middle of the scene that reacts to sound
-        geometryCube = new THREE.BoxGeometry(800 , 800, 800);
-        materialCube = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe:true });
+       // Model of bridge
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round(percentComplete, 2) + '% downloaded' );
+            }
+        };
 
-        meshCube = new THREE.Mesh(geometryCube, materialCube);
-        scene.add(meshCube);
+        var onError = function ( xhr ) {
+        };
+
+
+        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+
+        var loader = new THREE.OBJMTLLoader();
+        loader.load( 'model/bridge.obj', 'model/bridge.mtl', function ( object ) {
+
+            object.position.x = -5200;
+            object.position.y = -2700;
+            object.position.z = -2000;
+            object.rotation.y = -90;
+            object.scale.x = 75;
+            object.scale.y = 75;
+            object.scale.z = 75;
+            obj = object
+            scene.add( obj );
+
+        }, onProgress, onError );
+
 
         //add green grass plane
 
-        geometryPlane = new THREE.BoxGeometry(100000,300,100000);
-        materialPlane = new THREE.MeshPhongMaterial({color: 0x99FF33 });
-        var imgTexture = THREE.ImageUtils.loadTexture( "textures/Grass.jpg" );
-        imgTexture.wrapS = imgTexture.wrapT = THREE.RepeatWrapping;
-        imgTexture.anisotropy = 16;
-        var shininess = 50, shading = THREE.SmoothShading;
-        materialPlane2 = new THREE.MeshBasicMaterial( {
-            map: imgTexture,
-            shininess: shininess,
-            shading: shading
-        } );
 
-        meshPlane = new THREE.Mesh(geometryPlane, materialPlane2);
+        geometryPlane1 = new THREE.BoxGeometry(25000,50,25000);
+        //materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
+        var imgTexture1 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
+        materialPlane1 = new THREE.MeshBasicMaterial({
+          map: imgTexture1,
 
-        meshPlane.position.y = -2700;
-        scene.add(meshPlane);
+        });
+        meshPlane1 = new THREE.Mesh(geometryPlane1, materialPlane1);
+
+        meshPlane1.position.x = 9500;
+        meshPlane1.position.y = -2700;
+        meshPlane1.position.z = -7500;
+
+        scene.add(meshPlane1);
+
+        //grassGeometry
+        grassGeometry = new THREE.PlaneGeometry( 2500, 2500, grassWidth - 1, grassHeight - 1 );
+				grassGeometry.dynamic = true;
+				grassGeometry.vertices[ 3 ].z = 1;
+
+
+      	var grassMap = THREE.ImageUtils.loadTexture( 'textures/thingrass.png' );
+
+				grassMaterial = new THREE.MeshBasicMaterial( { map: grassMap, alphaTest: 0.8, side: THREE.DoubleSide } );
+
+
+      	for ( var i = 0, l = grassCount; i < l; i++ ) {
+					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
+					grassMeshes[i].position.x = Math.random() * 24000 - 12000;
+					grassMeshes[i].position.z = Math.random() * 24000 - 12000;
+					grassMeshes[i].rotation.y = Math.random() * Math.PI;
+          grassMeshes[i].position.x += 9500;
+          grassMeshes[i].position.y += -1600;
+          grassMeshes[i].position.z += -8900;
+
+					scene.add( grassMeshes[i] );
+				}
+
+        geometryPlane2 = new THREE.BoxGeometry(25000,50,25000);
+        //materialPlane2 = new THREE.MeshPhongMaterial({color: 'green' });
+        var imgTexture2 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
+        materialPlane2 = new THREE.MeshBasicMaterial({
+          map: imgTexture2,
+
+        });
+        meshPlane2 = new THREE.Mesh(geometryPlane2, materialPlane2);
+
+        meshPlane2.position.x = -20500;
+        meshPlane2.position.y = -2700;
+        meshPlane2.position.z = -7400;
+        scene.add(meshPlane2);
+
+        for ( var i = grassCount, l = grassCount*2; i < l; i++ ) {
+					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
+					grassMeshes[i].position.x = Math.random() * 24000 - 12000;
+					grassMeshes[i].position.z = Math.random() * 24000 - 12000;
+					grassMeshes[i].rotation.y = Math.random() * Math.PI;
+          grassMeshes[i].position.x += -20500;
+          grassMeshes[i].position.y += -1600;
+          grassMeshes[i].position.z += -8900;
+
+					scene.add( grassMeshes[i] );
+				}
+
+        waterPlane = new THREE.BoxGeometry(20000,10,25000);
+        materialWater = new THREE.MeshBasicMaterial({color: '#13BFE3' });
+        //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        waterMesh = new THREE.Mesh(waterPlane, materialWater);
+
+        waterMesh.position.y = -2800;
+        waterMesh.position.z = -7500;
+        scene.add(waterMesh);
 
         renderer = new THREE.WebGLRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -147,23 +239,31 @@
 
     function animate() {
 
-        requestAnimationFrame( animate );
-        /* Test Cube Animate + Colors */
-        if(meter != null){
 
-            if (meter.checkClipping() && recentclip == 0 ){
-              meshCube.material = new THREE.MeshBasicMaterial({color: '#'+Math.floor(Math.random()*16777215).toString(16), wireframe:true });
-              recentclip = 1;
-            }
-            else
-            {
-              recentclip = 0;
-            }
+      requestAnimationFrame( animate );
+      if(meter != null){
 
-            //meshCube.rotation.x += meter.volume/2;
-            //meshCube.rotation.y += meter.volume/2;
+        //Grassthingie animation
+
+        for ( var i = 0, il = grassGeometry.vertices.length / 2 - 1; i <= il; i ++ ) {
+          for ( var j = 0, jl = grassWidth, f = (il - i) / il; j < jl; j++ ) {
+            if(grassWiggler == 0){
+              grassGeometry.vertices[ jl * i + j ].z += 10*f + f * meter.volume * 30;
+              if (grassGeometry.vertices[ jl * i + j ].z > 950){
+              grassWiggler = 1;}}
+              else if(grassWiggler ==1){
+                grassGeometry.vertices[ jl * i + j ].z -= 10*f + f * meter.volume * 30;
+              if (grassGeometry.vertices[ jl * i + j ].z <-950){
+              grassWiggler = 0;}
+              //console.log (grassGeometry.vertices[ jl * i + j ].z);
+
+            }
+          }
+
+          grassGeometry.verticesNeedUpdate = true;
+
         }
-        /* End of Test Cube Animate + Colors */
+      }
 
         /* FIRE Animate() */
         if(meshFire != null){
@@ -171,11 +271,12 @@
         }
         /* End of FIRE Animate() */
 
+
+
+
         controls.update() // update the OrbitControls
 
         renderer.render( scene, camera );
 
-    }
-
-
+      }
 
