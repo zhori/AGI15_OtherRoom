@@ -38,7 +38,7 @@ window.onload = function() {
             },
         }, gotStream, didntGetStream);
     } catch (e) {
-        
+
         //alert('getUserMedia threw exception :' + e);
     }
 
@@ -71,8 +71,10 @@ function drawLoop( time ) {
     // draw a bar based on the current volume
     if (meter.checkClipping())
         canvasContext.fillStyle = "lightblue";
-    else
-        canvasContext.fillStyle = "green";
+    else{
+      canvasContext.fillStyle = "darkblue";
+      canvasContext.globalAlpha = 0.5;
+    }
 
     canvasContext.fillRect(0, 0, WIDTH, meter.volume*HEIGHT*1.4);
 
