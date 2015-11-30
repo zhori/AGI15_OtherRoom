@@ -18,15 +18,9 @@
 
 
 
-        //light to make texture visible
-        var ambient = new THREE.AmbientLight( 0x404040 );
-        scene.add( ambient );
+        
 
-        var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-
-        directionalLight.position.set( 0, 1, 1 ).normalize();
-
-        scene.add( directionalLight );
+        lightScene();
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 400000 );
         camera.position.z = 7500;
@@ -138,10 +132,11 @@
         geometryPlane1 = new THREE.BoxGeometry(25000,50,25000);
         //materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
         var imgTexture1 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
+
         imgTexture1.wrapS = THREE.RepeatWrapping;
 	      imgTexture1.wrapT = THREE.RepeatWrapping;
 	      imgTexture1.repeat.set(5,5);
-        materialPlane1 = new THREE.MeshBasicMaterial({
+        materialPlane1 = new THREE.MeshLambertMaterial({
           map: imgTexture1,
 
         });
@@ -161,7 +156,7 @@
 
       	var grassMap = THREE.ImageUtils.loadTexture( 'textures/thingrass.png' );
 
-				grassMaterial = new THREE.MeshBasicMaterial( { map: grassMap, alphaTest: 0.8, side: THREE.DoubleSide } );
+				grassMaterial = new THREE.MeshPhongMaterial( { map: grassMap, alphaTest: 0.8, side: THREE.DoubleSide } );
 
 
       	for ( var i = 0, l = grassCount; i < l; i++ ) {
@@ -182,7 +177,7 @@
         imgTexture2.wrapS = THREE.RepeatWrapping;
 	      imgTexture2.wrapT = THREE.RepeatWrapping;
 	      imgTexture2.repeat.set(5,5);
-        materialPlane2 = new THREE.MeshBasicMaterial({
+        materialPlane2 = new THREE.MeshLambertMaterial({
           map: imgTexture2,
 
         });
@@ -206,7 +201,7 @@
 				}
 
         waterPlane = new THREE.BoxGeometry(20000,10,25000);
-        materialWater = new THREE.MeshBasicMaterial({color: '#13BFE3' });
+        materialWater = new THREE.MeshLambertMaterial({color: '#13BFE3' });
         //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
         waterMesh = new THREE.Mesh(waterPlane, materialWater);
 
@@ -283,6 +278,27 @@
         controls.update() // update the OrbitControls
 
         renderer.render( scene, camera );
+
+      }
+
+      function lightScene() {
+
+        //light to make texture visible
+        var ambient = new THREE.AmbientLight( 0x404040 );
+        //scene.add( ambient );
+
+        // var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+        // directionalLight.position.set( 0, 1, 1 ).normalize();
+        // scene.add( directionalLight );
+
+        var light = new THREE.PointLight( 0x0066FF, 2, 0 );
+        light.position.set( 0, 3000, 0 );
+        scene.add( light );
+
+        var firelight = new THREE.PointLight( 0xFF6200, 7, 6000 );
+        firelight.position.set( 3500, 0, 2500 );
+        scene.add( firelight );
+
 
       }
 
