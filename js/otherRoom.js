@@ -138,6 +138,9 @@
         geometryPlane1 = new THREE.BoxGeometry(25000,50,25000);
         //materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
         var imgTexture1 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
+        imgTexture1.wrapS = THREE.RepeatWrapping;
+	      imgTexture1.wrapT = THREE.RepeatWrapping;
+	      imgTexture1.repeat.set(5,5);
         materialPlane1 = new THREE.MeshBasicMaterial({
           map: imgTexture1,
 
@@ -176,6 +179,9 @@
         geometryPlane2 = new THREE.BoxGeometry(25000,50,25000);
         //materialPlane2 = new THREE.MeshPhongMaterial({color: 'green' });
         var imgTexture2 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
+        imgTexture2.wrapS = THREE.RepeatWrapping;
+	      imgTexture2.wrapT = THREE.RepeatWrapping;
+	      imgTexture2.repeat.set(5,5);
         materialPlane2 = new THREE.MeshBasicMaterial({
           map: imgTexture2,
 
@@ -263,7 +269,6 @@
           grassGeometry.verticesNeedUpdate = true;
 
         }
-      }
 
         /* FIRE Animate() */
         if(meshFire != null){
@@ -271,6 +276,7 @@
         }
         /* End of FIRE Animate() */
 
+      }
 
 
 

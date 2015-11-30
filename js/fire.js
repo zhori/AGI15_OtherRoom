@@ -1,10 +1,11 @@
 fireParticles = [];
 
 geometryFire = new THREE.SphereGeometry(750, 10, 10);
-materialFire = new THREE.MeshLambertMaterial( {color: 'orange',wireframe: true} );
+materialFire = new THREE.MeshLambertMaterial( {color: 'black',wireframe: false} );
 meshFire = new THREE.Mesh(geometryFire, materialFire);
 scene.add(meshFire);
 
+meshFire.position.x = 4000;
 meshFire.position.y = -2000;
 
 makeParticles();
@@ -33,6 +34,7 @@ function makeParticles() {
 					// give it a random x and y position between -750 and 750
 					particle.position.x = Math.floor(Math.random() * 1500 - 750);
 					particle.position.z = Math.floor(Math.random() * 1500 - 750);
+          particle.position.x += 4000;
 
 					// set its z position
 					particle.position.y = ypos;
@@ -57,7 +59,7 @@ function updateParticles() {
 					particle = fireParticles[i];
 
 					// and move it forward dependent on the mouseY position.
-					particle.position.y += 10;
+					particle.position.y += 10 + meter.volume * 100;
 
           if( particle.position.x > 0 ){
             particle.position.x -= 2;
@@ -66,9 +68,9 @@ function updateParticles() {
             particle.position.x += 2;
           }
          else{
-            particle.position.x = Math.floor(Math.random() * 1500 - 750);
+            particle.position.x = (Math.floor(Math.random() * 1500 - 750))+4000;
 					  particle.position.z = Math.floor(Math.random() * 1500 - 750);
-            particle.position.y-=1000;
+            //particle.position.y-=1000;
           }
 
           if( particle.position.z > 0 ){
@@ -78,21 +80,22 @@ function updateParticles() {
             particle.position.z += 2;
           }
           else{
-            particle.position.x = Math.floor(Math.random() * 1500 - 750);
+            particle.position.x = (Math.floor(Math.random() * 1500 - 750))+4000;
 					  particle.position.z = Math.floor(Math.random() * 1500 - 750);
-            particle.position.y-=1000;
+            //particle.position.y-=1000;
           }
 
 					// if the particle is too close move it to the back
 					if(particle.position.y > -1000){
             var kill = Math.random();
             if(kill < 0.05){
-              particle.position.x = Math.floor(Math.random() * 1500 - 750);
+              particle.position.x = (Math.floor(Math.random() * 1500 - 750))+4000;
 					    particle.position.z = Math.floor(Math.random() * 1500 - 750);
               particle.position.y -= 1000;
             }
 
           }
+
 
 			}
 }
