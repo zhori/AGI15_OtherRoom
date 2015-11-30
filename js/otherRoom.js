@@ -1,6 +1,11 @@
     var scene, camera, renderer, controls;
     var geometry, material, mesh;
 
+    var grassMaterial, grassGeometry, grassMeshes = [],grassMeshes2 = [];
+
+		var grassHeight = 5, grassWidth = 2;
+		var grassCount = 10000;
+		var clock = new THREE.Clock();
 
     init();
     animate();
@@ -9,12 +14,14 @@
 
         scene = new THREE.Scene();
 
+
+
         //light to make texture visible
         var ambient = new THREE.AmbientLight( 0x404040 );
         scene.add( ambient );
 
         var directionalLight = new THREE.DirectionalLight( 0xffeedd );
-        directionalLight.position.set( 0, 0, 1 ).normalize();
+        directionalLight.position.set( 0, 1, 1 ).normalize();
         scene.add( directionalLight );
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 400000 );
@@ -57,7 +64,7 @@
         } );
 
         skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 200000, 200000, 200000 ), material );
-
+        skyboxMesh.position.y = -20000;
         scene.add( skyboxMesh );
 
         // Model of window
@@ -131,41 +138,77 @@
 
         //add green grass plane
 
-        geometryPlane1 = new THREE.BoxGeometry(100000,50,100000);
+        geometryPlane1 = new THREE.BoxGeometry(25000,50,25000);
         //materialPlane1 = new THREE.MeshPhongMaterial({color: 'green' });
-        var imgTexture1 = THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        var imgTexture1 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
         materialPlane1 = new THREE.MeshBasicMaterial({
           map: imgTexture1,
 
         });
         meshPlane1 = new THREE.Mesh(geometryPlane1, materialPlane1);
 
-        meshPlane1.position.x = 47000;
+        meshPlane1.position.x = 9500;
         meshPlane1.position.y = -2700;
-        meshPlane1.position.z = -45000;
+        meshPlane1.position.z = -7500;
+
         scene.add(meshPlane1);
 
-        geometryPlane2 = new THREE.BoxGeometry(100000,50,100000);
+        //grassGeometry
+        grassGeometry = new THREE.PlaneGeometry( 1000, 1000, grassWidth - 1, grassHeight - 1 );
+				grassGeometry.dynamic = true;
+				grassGeometry.vertices[ 3 ].z = 1;
+
+
+      	var grassMap = THREE.ImageUtils.loadTexture( 'textures/thingrass.png' );
+
+				grassMaterial = new THREE.MeshBasicMaterial( { map: grassMap, alphaTest: 0.8, side: THREE.DoubleSide } );
+
+
+      	for ( var i = 0, l = grassCount; i < l; i++ ) {
+					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
+					grassMeshes[i].position.x = Math.random() * 25000 - 12500;
+					grassMeshes[i].position.z = Math.random() * 25000 - 12500;
+					grassMeshes[i].rotation.y = Math.random() * Math.PI;
+          grassMeshes[i].position.x += 9500;
+          grassMeshes[i].position.y += -2200;
+          grassMeshes[i].position.z += -9000;
+
+					scene.add( grassMeshes[i] );
+				}
+
+        geometryPlane2 = new THREE.BoxGeometry(25000,50,25000);
         //materialPlane2 = new THREE.MeshPhongMaterial({color: 'green' });
-        var imgTexture2 = THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
+        var imgTexture2 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
         materialPlane2 = new THREE.MeshBasicMaterial({
           map: imgTexture2,
 
         });
         meshPlane2 = new THREE.Mesh(geometryPlane2, materialPlane2);
 
-        meshPlane2.position.x = -58000;
+        meshPlane2.position.x = -20500;
         meshPlane2.position.y = -2700;
-        meshPlane2.position.z = -45000;
+        meshPlane2.position.z = -7400;
         scene.add(meshPlane2);
 
-        waterPlane = new THREE.BoxGeometry(25000,10,100000);
+        for ( var i = grassCount, l = grassCount*2; i < l; i++ ) {
+					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
+					grassMeshes[i].position.x = Math.random() * 25000 - 12500;
+					grassMeshes[i].position.z = Math.random() * 25000 - 12500;
+					grassMeshes[i].rotation.y = Math.random() * Math.PI;
+          grassMeshes[i].position.x += -20500;
+          grassMeshes[i].position.y += -2200;
+          grassMeshes[i].position.z += -9000;
+
+					scene.add( grassMeshes[i] );
+				}
+
+        waterPlane = new THREE.BoxGeometry(20000,10,25000);
         materialWater = new THREE.MeshBasicMaterial({color: '#13BFE3' });
         //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
         waterMesh = new THREE.Mesh(waterPlane, materialWater);
 
         waterMesh.position.y = -2800;
-        waterMesh.position.z = -45000;
+        waterMesh.position.z = -7500;
         scene.add(waterMesh);
 
 
@@ -218,6 +261,18 @@
             meshCube.rotation.x += meter.volume/2;
             meshCube.rotation.y += meter.volume/2;
         }
+
+      //Grassthingie
+      var delta = clock.getDelta(),
+					time = clock.getElapsedTime();
+
+				for ( var i = 0, il = grassGeometry.vertices.length / 2 - 1; i <= il; i ++ ) {
+					for ( var j = 0, jl = grassWidth, f = (il - i) / il; j < jl; j++ ) {
+						grassGeometry.vertices[ jl * i + j ].z = f * Math.sin(time) * 1000;
+					}
+				}
+
+				grassGeometry.verticesNeedUpdate = true;
 
         controls.update() // update the OrbitControls
 
