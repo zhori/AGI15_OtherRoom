@@ -60,67 +60,9 @@
 
         scene.add( skyboxMesh );
 
-        // Model of window
-        var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round(percentComplete, 2) + '% downloaded' );
-            }
-        };
-
-        var onError = function ( xhr ) {
-        };
-
-
-        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-
-
-        var loader = new THREE.OBJMTLLoader();
-        loader.load( 'model/windowframe.obj', 'model/windowframe.mtl', function ( object ) {
-
-            object.position.x = 0;
-            object.position.y = -2500;
-            object.position.z = 4000;
-            //object.rotation.y = Math.PI;
-            object.scale.x = 200;
-            object.scale.y = 100;
-            object.scale.z = 100;
-            obj = object
-            scene.add( obj );
-
-        }, onProgress, onError );
-
-       // Model of bridge
-        var onProgress = function ( xhr ) {
-            if ( xhr.lengthComputable ) {
-                var percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round(percentComplete, 2) + '% downloaded' );
-            }
-        };
-
-        var onError = function ( xhr ) {
-        };
-
-
-        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
-
-
-        var loader = new THREE.OBJMTLLoader();
-        loader.load( 'model/bridge.obj', 'model/bridge.mtl', function ( object ) {
-
-            object.position.x = -5200;
-            object.position.y = -2700;
-            object.position.z = -2000;
-            object.rotation.y = -90;
-            object.scale.x = 75;
-            object.scale.y = 75;
-            object.scale.z = 75;
-            obj = object
-            scene.add( obj );
-
-        }, onProgress, onError );
-
-
+        add3DObject('model/windowframe.obj', 'model/windowframe.mtl', 0, -2500, 4000, 200, 100,100);
+        add3DObject('model/bridge.obj', 'model/bridge.mtl', -5200, -2700, -2000, 75, 75, 75, undefined, -90, undefined);
+        add3DObject('model/lowpolytree2/lowpolytree.obj', 'model/lowpolytree2/lowpolytree.mtl', 0, 3000, -15000, 3000, 3000, 3000, 0, 0, 0);
 
         // add simple cube in the middle of the scene that reacts to sound
         geometryCube = new THREE.BoxGeometry(800 , 800, 800);
@@ -222,6 +164,54 @@
         controls.update() // update the OrbitControls
 
         renderer.render( scene, camera );
+
+    }
+
+    function add3DObject(objURL, mtlURL, posX, posY, posZ, scaleX, scaleY, scaleZ, rotX, rotY, RotZ) {
+        // Model of window
+        var onProgress = function ( xhr ) {
+            if ( xhr.lengthComputable ) {
+                var percentComplete = xhr.loaded / xhr.total * 100;
+                console.log( Math.round(percentComplete, 2) + '% downloaded' );
+            }
+        };
+
+        var onError = function ( xhr ) {
+        };
+
+
+        THREE.Loader.Handlers.add( /\.dds$/i, new THREE.DDSLoader() );
+
+
+        var loader = new THREE.OBJMTLLoader();
+        loader.load( objURL, mtlURL, function ( object ) {
+
+            // Optional settings
+            if(posX)
+                object.position.x = posX;
+            if(posY)
+                object.position.y = posY;
+            if(posZ)
+                object.position.z = posZ;
+
+            if(scaleX)
+                object.scale.x = scaleX;
+            if(scaleY)
+                object.scale.y = scaleY;
+            if(scaleZ)
+                object.scale.z = scaleZ;
+
+            if(rotX)
+                object.rotation.x = rotX;
+            if(rotY)
+                object.rotation.y = rotY;
+            if(RotZ)
+                object.rotation.z = rotZ;
+
+            obj = object;
+            scene.add( obj );
+
+        }, onProgress, onError );
 
     }
 
