@@ -5,13 +5,14 @@
     var grassMaterial, grassGeometry, grassMeshes = [], grassMeshes2 = [];
 
 	var grassHeight = 4, grassWidth = 2;
-	var grassCount = 2500;
+	var grassCount1 = 2000;
+  var grassCount2 = 1000;
 	var clock = new THREE.Clock();
 
     var grassWiggler = 0;
 
-    
-    //water parameters 
+
+    //water parameters
     var parameters = {
         width: 8000,
         height: 25000,
@@ -175,7 +176,7 @@
 				grassMaterial = new THREE.MeshPhongMaterial( { map: grassMap, alphaTest: 0.8, side: THREE.DoubleSide } );
 
 
-      	for ( var i = 0, l = grassCount; i < l; i++ ) {
+      	for ( var i = 0, l = grassCount1; i < l; i++ ) {
 					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
           var x = Math.random() * 24000 - 12000;
           var z = Math.random() * 24000 - 12000;
@@ -210,7 +211,7 @@
         meshPlane2.position.z = -7400;
         scene.add(meshPlane2);
 
-        for ( var i = grassCount, l = grassCount*2; i < l; i++ ) {
+        for ( var i = grassCount1, l = grassCount1+grassCount2; i < l; i++ ) {
 					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
 					grassMeshes[i].position.x = Math.random() * 24000 - 12000;
 					grassMeshes[i].position.z = Math.random() * 24000 - 12000;
@@ -257,7 +258,7 @@
         waterMesh.position.y = -2800;
         waterMesh.position.z = -7500;
         scene.add(waterMesh);
-       
+
 
         // Setup the controls
         controls = new THREE.OrbitControls( camera, renderer.domElement );
