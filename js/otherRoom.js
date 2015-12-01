@@ -1,13 +1,28 @@
     var scene, camera, renderer, controls;
     var geometry, material, mesh, meshFire;
+    var light;
 
     var grassMaterial, grassGeometry, grassMeshes = [], grassMeshes2 = [];
 
-		var grassHeight = 4, grassWidth = 2;
-		var grassCount = 2500;
-		var clock = new THREE.Clock();
+	var grassHeight = 4, grassWidth = 2;
+	var grassCount = 2500;
+	var clock = new THREE.Clock();
 
     var grassWiggler = 0;
+
+    
+    //water parameters 
+    var parameters = {
+        width: 8000,
+        height: 25000,
+        widthSegments: 250,
+        heightSegments: 250,
+        depth: 1500,
+        param: 4,
+        filterparam: 1
+    };
+
+    var waterNormals;
 
     init();
     animate();
@@ -16,14 +31,15 @@
 
         scene = new THREE.Scene();
 
-
-
-
-
         lightScene();
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 400000 );
         camera.position.z = 7500;
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+         // renderer.render( scene, camera );
+        document.body.appendChild( renderer.domElement );
 
         // Add the skybox
         // load the cube textures
@@ -181,8 +197,8 @@
         //materialPlane2 = new THREE.MeshPhongMaterial({color: 'green' });
         var imgTexture2 = THREE.ImageUtils.loadTexture( "textures/Grassmud.jpg" )
         imgTexture2.wrapS = THREE.RepeatWrapping;
-	      imgTexture2.wrapT = THREE.RepeatWrapping;
-	      imgTexture2.repeat.set(5,5);
+        imgTexture2.wrapT = THREE.RepeatWrapping;
+        imgTexture2.repeat.set(5,5);
         materialPlane2 = new THREE.MeshLambertMaterial({
           map: imgTexture2,
 
@@ -205,21 +221,43 @@
 
 					scene.add( grassMeshes[i] );
 				}
+        //water
+        waterNormals = new THREE.ImageUtils.loadTexture( 'textures/waternormals.jpg' );
+        waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 
-        waterPlane = new THREE.BoxGeometry(20000,10,25000);
+        water = new THREE.Water( renderer, camera, scene, {
+            textureWidth: 512,
+            textureHeight: 512,
+            waterNormals: waterNormals,
+            alpha:  1.0,
+            sunDirection: light.position.clone().normalize(),
+            sunColor: 0xffffff,
+            waterColor: 0x001e0f,
+            distortionScale: 50.0,
+        } );
+
+        mirrorMesh = new THREE.Mesh(
+            new THREE.PlaneBufferGeometry( parameters.width, parameters.height),
+            water.material
+        );
+
+        mirrorMesh.add( water );
+        mirrorMesh.rotation.x = - Math.PI * 0.5;
+        scene.add( mirrorMesh );
+        mirrorMesh.position.x = -5000;
+        mirrorMesh.position.y = -2700;
+        mirrorMesh.position.z = -7500;
+
+        waterPlane = new THREE.BoxGeometry(10000,10,25000);
         materialWater = new THREE.MeshLambertMaterial({color: '#13BFE3' });
         //THREE.ImageUtils.loadTexture( "textures/Grass.jpg" )
         waterMesh = new THREE.Mesh(waterPlane, materialWater);
-
+        //waterMesh.add(water);
+        waterMesh.position.x = -5000;
         waterMesh.position.y = -2800;
         waterMesh.position.z = -7500;
         scene.add(waterMesh);
-
-        renderer = new THREE.WebGLRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        renderer.render( scene, camera );
-
-        document.body.appendChild( renderer.domElement );
+       
 
         // Setup the controls
         controls = new THREE.OrbitControls( camera, renderer.domElement );
@@ -246,12 +284,10 @@
 
     function animate() {
 
-
       requestAnimationFrame( animate );
+
       if(meter != null){
-
         //Grassthingie animation
-
         for ( var i = 0, il = grassGeometry.vertices.length / 2 - 1; i <= il; i ++ ) {
           for ( var j = 0, jl = grassWidth, f = (il - i) / il; j < jl; j++ ) {
             if(grassWiggler == 0){
@@ -266,9 +302,7 @@
 
             }
           }
-
           grassGeometry.verticesNeedUpdate = true;
-
         }
 
         /* FIRE Animate() */
@@ -276,16 +310,12 @@
             fireAnimate();
         }
         /* End of FIRE Animate() */
+       }
 
-      }
-
-
-
-        controls.update() // update the OrbitControls
-
+        //water animation
+        waterrender();
         renderer.render( scene, camera );
-
-      }
+    }
 
       function lightScene() {
 
@@ -297,7 +327,7 @@
         // directionalLight.position.set( 0, 1, 1 ).normalize();
         // scene.add( directionalLight );
 
-        var light = new THREE.PointLight( 0x0066FF, 2, 0 );
+        light = new THREE.PointLight( 0x0066FF, 2, 0 );
         light.position.set( 0, 3000, 0 );
         scene.add( light );
 
@@ -305,6 +335,11 @@
         firelight.position.set( 3500, 0, 2500 );
         scene.add( firelight );
 
-
       }
+
+      function waterrender() {
+        water.material.uniforms.time.value += 1.0/4;
+        water.render();
+    }
+
 
