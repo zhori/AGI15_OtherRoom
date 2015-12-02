@@ -114,9 +114,7 @@
 				grassGeometry.dynamic = true;
 				grassGeometry.vertices[ 3 ].z = 1;
 
-
       	var grassMap = THREE.ImageUtils.loadTexture( 'textures/thingrass.png' );
-
 				grassMaterial = new THREE.MeshPhongMaterial( { map: grassMap, alphaTest: 0.8, side: THREE.DoubleSide } );
 
 
@@ -124,17 +122,17 @@
 					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
           var x = Math.random() * 24000 - 12000;
           var z = Math.random() * 24000 - 12000;
+          var y = Math.random() * 1000 - 500;
           if( (z < 7000 || z > 10000) || (x < -7000 || x > -4000) ){ //x < -7000 || x > -4000
             grassMeshes[i].position.x = x;
 					  grassMeshes[i].position.z = z;
+            grassMeshes[i].position.y = y;
 					  grassMeshes[i].rotation.y = Math.random() * Math.PI;
             grassMeshes[i].position.x += 9500;
             grassMeshes[i].position.y += -1600;
             grassMeshes[i].position.z += -8900;
 					  scene.add( grassMeshes[i] );
           }
-
-
 
 				}
 
@@ -159,6 +157,7 @@
 					grassMeshes[i] = new THREE.Mesh( grassGeometry, grassMaterial );
 					grassMeshes[i].position.x = Math.random() * 24000 - 12000;
 					grassMeshes[i].position.z = Math.random() * 24000 - 12000;
+          grassMeshes[i].position.y = Math.random() * 1000 - 500;
 					grassMeshes[i].rotation.y = Math.random() * Math.PI;
           grassMeshes[i].position.x += -20500;
           grassMeshes[i].position.y += -1600;
@@ -174,7 +173,7 @@
             textureWidth: 512,
             textureHeight: 512,
             waterNormals: waterNormals,
-            alpha:  1.0,
+            alpha:  0.8,
             sunDirection: light.position.clone().normalize(),
             sunColor: 0xffffff,
             waterColor: 0x001e0f,
