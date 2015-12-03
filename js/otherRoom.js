@@ -44,10 +44,10 @@
 
         // Add the skybox
         // load the cube textures
-        var urlPrefix   = "Images/skycartoon/";
-        var urls = [ urlPrefix + "posx.jpg", urlPrefix + "negx.jpg",
-            urlPrefix + "posy.jpg", urlPrefix + "negy.jpg",
-            urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
+        var urlPrefix   = "Images/night/";
+        var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
+            urlPrefix + "posy.png", urlPrefix + "negy.png",
+            urlPrefix + "posz.png", urlPrefix + "negz.png" ];
 
         // var urlPrefix   = "Images/skycartoon/";
         // var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
@@ -78,8 +78,8 @@
 
         } );
 
-        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 200000, 200000, 200000 ), material );
-        skyboxMesh.position.y = -20000;
+        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 100000, 100000, 100000 ), material );
+        skyboxMesh.position.y = 10000;
         scene.add( skyboxMesh );
 
         add3DObject('model/windowframe.obj', 'model/windowframe.mtl', 0, -2500, 4000, 200, 100,100);
