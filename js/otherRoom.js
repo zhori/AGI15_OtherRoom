@@ -44,10 +44,10 @@
 
         // Add the skybox
         // load the cube textures
-        var urlPrefix   = "Images/night/";
-        var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
-            urlPrefix + "posy.png", urlPrefix + "negy.png",
-            urlPrefix + "posz.png", urlPrefix + "negz.png" ];
+        var urlPrefix   = "Images/nebula/";
+        var urls = [ urlPrefix + "posx.jpg", urlPrefix + "negx.jpg",
+            urlPrefix + "posy.jpg", urlPrefix + "negy.jpg",
+            urlPrefix + "posz.jpg", urlPrefix + "negz.jpg" ];
 
         // var urlPrefix   = "Images/skycartoon/";
         // var urls = [ urlPrefix + "posx.png", urlPrefix + "negx.png",
