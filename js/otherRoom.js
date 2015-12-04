@@ -78,14 +78,15 @@
 
         } );
 
-        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 100000, 100000, 100000 ), material );
-        skyboxMesh.position.y = -8000;
-        skyboxMesh.position.x = 20000;
+        skyboxMesh = new THREE.Mesh( new THREE.BoxGeometry( 40000, 40000, 40000 ), material );
+        skyboxMesh.position.y = -1000;
+        skyboxMesh.position.x = -6000;
         scene.add( skyboxMesh );
 
         add3DObject('model/windowframe.obj', 'model/windowframe.mtl', 0, -2500, 4000, 200, 100,100);
         add3DObject('model/bridge.obj', 'model/bridge.mtl', -5200, -2700, -2000, 75, 75, 75, undefined, -90, undefined);
         add3DObject('model/lowpolytree2/lowpolytree.obj', 'model/lowpolytree2/lowpolytree.mtl', 6000, 2000, -15000, 3000, 3000, 3000, 0, 0, 0);
+
 
 
         //add green grass plane
@@ -250,12 +251,10 @@
           grassGeometry.verticesNeedUpdate = true;
         }
 
-        /* FIRE Animate() */
-        if(meshFire != null){
-            fireAnimate();
-        }
-        /* End of FIRE Animate() */
        }
+
+              /* FIRE Animate() */
+            fireAnimate();
 
         //water animation
         waterrender();
