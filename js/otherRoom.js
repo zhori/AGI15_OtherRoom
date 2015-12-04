@@ -229,35 +229,37 @@
     }
 
     function animate() {
+        setTimeout( function() {
+          requestAnimationFrame( animate );
 
-      requestAnimationFrame( animate );
+          if(meter != null){
+            //Grassthingie animation
+            for ( var i = 0, il = grassGeometry.vertices.length / 2 - 1; i <= il; i ++ ) {
+              for ( var j = 0, jl = grassWidth, f = (il - i) / il; j < jl; j++ ) {
+                if(grassWiggler == 0){
+                  grassGeometry.vertices[ jl * i + j ].z += 10*f + f * meter.volume * 30;
+                  if (grassGeometry.vertices[ jl * i + j ].z > 950){
+                    grassWiggler = 1;}}
+                else if(grassWiggler ==1){
+                  grassGeometry.vertices[ jl * i + j ].z -= 10*f + f * meter.volume * 30;
+                  if (grassGeometry.vertices[ jl * i + j ].z <-950){
+                    grassWiggler = 0;}
+                  //console.log (grassGeometry.vertices[ jl * i + j ].z);
 
-      if(meter != null){
-        //Grassthingie animation
-        for ( var i = 0, il = grassGeometry.vertices.length / 2 - 1; i <= il; i ++ ) {
-          for ( var j = 0, jl = grassWidth, f = (il - i) / il; j < jl; j++ ) {
-            if(grassWiggler == 0){
-              grassGeometry.vertices[ jl * i + j ].z += 10*f + f * meter.volume * 30;
-              if (grassGeometry.vertices[ jl * i + j ].z > 950){
-              grassWiggler = 1;}}
-              else if(grassWiggler ==1){
-                grassGeometry.vertices[ jl * i + j ].z -= 10*f + f * meter.volume * 30;
-              if (grassGeometry.vertices[ jl * i + j ].z <-950){
-              grassWiggler = 0;}
-              //console.log (grassGeometry.vertices[ jl * i + j ].z);
-
+                }
+              }
+              grassGeometry.verticesNeedUpdate = true;
             }
+
           }
-          grassGeometry.verticesNeedUpdate = true;
-        }
 
-       }
+          /* FIRE Animate() */
+          fireAnimate();
 
-              /* FIRE Animate() */
-            fireAnimate();
+          //water animation
+          waterrender();
 
-        //water animation
-        waterrender();
+        }, 1000 / 30 );
         renderer.render( scene, camera );
     }
 
