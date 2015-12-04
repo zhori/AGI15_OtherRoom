@@ -132,11 +132,11 @@ function updateParticles() {
 
     if( (pX < 3400 || pX > 4600) || (pZ < -600 || pZ > 600) || pY > -100 ){
       particle.material.color = new THREE.Color(partColors[4]);
-      particle.scale.x = particle.scale.y = 80;
+      particle.scale.x = particle.scale.y = 30;
     }
     else if( (pX < 3450 || pX > 4550) || (pZ < -550 || pZ > 550) || pY > -200 ){
       particle.material.color = new THREE.Color(partColors[3]);
-      particle.scale.x = particle.scale.y = 120;
+      particle.scale.x = particle.scale.y = 50;
     }
     else if( (pX < 3500 || pX > 4500) || (pZ < -500 || pZ > 500) ){
       particle.material.color = new THREE.Color(partColors[2]);
@@ -144,7 +144,7 @@ function updateParticles() {
     }
     else if( (pX < 3600 || pX > 4400) || (pZ < -400 || pZ > 400) ){
       particle.material.color = new THREE.Color(partColors[1]);
-      particle.scale.x = particle.scale.y = 900;
+      particle.scale.x = particle.scale.y = 750;
     }
     else{
       particle.material.color = new THREE.Color(partColors[0]);
