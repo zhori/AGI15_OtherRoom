@@ -1,38 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Other Room</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="demo.css">
-	</head>
-	<body>
+    <head>
+        <title>Other Room</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="demo.css">
+    </head>
+    <body>
         <canvas id="meter"></canvas>
 
-		<script src="build/three.js"></script>
-		<script src="build/jquery-2.1.4.js"></script>
+        <script src="build/three.js"></script>
+        <script src="build/jquery-2.1.4.js"></script>
         <script src="js/audio.js"></script>
-		<script src="js/OrbitControls.js"></script>
-		<script src="js/loaders/DDSLoader.js"></script>
-		<script src="js/loaders/MTLLoader.js"></script>
-		<script src="js/loaders/OBJMTLLoader.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/loaders/DDSLoader.js"></script>
+        <script src="js/loaders/MTLLoader.js"></script>
+        <script src="js/loaders/OBJMTLLoader.js"></script>
         <script src="js/loaders/OBJLoader.js"></script>
         <script src="js/Mirror.js"></script>
-		<script src="js/WaterShader.js"></script>
-		<script src="js/otherRoom.js"></script>
-		<script src="js/fire.js"></script>
+        <script src="js/WaterShader.js"></script>
+        <script src="js/otherRoom.js"></script>
+        <script src="js/fire.js"></script>
 
         <div id="infoicons">
             <img height="40px" src="images/info.png"/>
             <img height="40px" src="images/arrow.png"/>
         </div>
 
-        <div id="description" class="info"><h1>Description</h1></div>
-        <div id="challenges" class="info"><h1>Challenges and lessons</h1></div>
-        <div id="people" class="info"><h1>People</h1></div>
-        <div id="individual" class="info"><h1>Individual Work</h1></div>
+        <div id="description" class="info"><h1>Description</h1><p>Other Room purpose was to build a meditative scene that users could project on a wall at home to create the illusion of a another room just beyond the wall. To avoid creating a stressing experience the interaction would consist only of sound,  the scene slightly changing depending on the current volume. Thus the user could put on their favorite harmonic music and watch the assets of the other room sway to the gentle music.</p>
+
+            <p>We wanted to create this room inside WebGL with Three.js to allow for us to learn graphics on a deeper level and focus more on the three individual graphics elements we each wanted to work on, fire, water and artistic rendering. We purposely left the interaction simple to give us more time to study and implement our individual projects.</p>
+
+            <p>This project was a part of the Advanced graphics and interaction 2015 course at KTH.</p>
+        </div>
+
+        <div id="challenges" class="info"><h1>Challenges and learning</h1>
+            <p>The biggest challenge for us three was learning WebGL and Three.js, since we all lacked any major experience with this these two. WebGL is a powerful graphical engine and studying it gave us insights into how the internal graphical pipeline functioned (transforming the 3d scene into a 2d image), but it took time to understand new concepts and terms. Three.js helped in this learning process since it packages many of the WebGL functions in a more beginner friendly API.  </p>
+
+            <p>To add to the challenge we wanted to get a taste of either state of the art graphic elements or at least very advanced ones, and try to implement as much as we could of it into our scene.</p>
+
+            <p>Things we learned under the process consisted of tasks such as:<br>
+            <ul>
+                <li>Javascript programming</li>
+                <li>Basic HTML</li>
+                <li>WebGL features:</li>
+                <ul>
+                    <li>Three.js</li>
+                    <li>Graphical pipeline basics</li>
+                    <li>Shaders</li>
+                    <li>Importing 3d models</li>
+                    <li>Skyboxes</li>
+                    <li>Lighting a scene</li>
+                </ul>
+            </ul>
+
+            </p></div>
+
+    <div id="individual" class="info"><h1>Individual Work</h1>
+
+        <p><i>Artistic Rendering by Mikael</i></p>
+        <p>Artistic rendering can be achieved in many ways, through for example post editing the created 2d image, or as in our case, edit the actual 3d scene before it is rendered. The purpose it to make a scene look aesthetically pleasing, often by mimicking features of real hand drawn paintings, and can be considered a branch within non-photorealistic rendering (NPR). My shoot at artistic rendering consist of mimicking the work of Kaplan et al. (2000), which uses geografatals (dynamically generated particles) attached to the faces of a 3d object to create a hand drawn effect or textured effect. We decided in the end against including artistic rendering in the scene, but some examples of the result I achieved can be seen here:</p>
+        <center>
+            <p> <img width="75%" src="images/artisticrendering.png"/></p></center>
+
+
+        <p><i>Fire by Lennart</i></p>
+        <p>To come..</p>
+
+        <p><i>Water by Huiting</i></p>
+        <p>To come..</p>
+
+    </div>
+
+    <div id="people" class="info"><h1>People</h1>
+
+        <div class="ccont">
+        <img class="contactpic" width="95px" src="images/lennart.png"/><br>
+        <div class="contact">
+            <b>Lennart Jönsson</b> <br>
+            Human Computer Interaction <br>
+            <a href="mailto:lenjons@kth.se">
+                lenjons@kth.se</a> <br>
+            <a href="https://se.linkedin.com/in/lenjons">
+                <img border="0" src="linkedinlogo.png" width="30" height="30"/>
+            </a>
+        </div>
+        </div>
+
+        <div class="ccont">
+        <img class="contactpic" width="95px" src="images/huiting.png"/><br>
+        <div class="contact">
+            <b>Huiting Wang</b> <br>
+            Human Computer Interaction <br>
+            <a href="mailto:huitingw@kth.se">
+                huitingw@kth.se</a> <br>
+            <a href="https://cn.linkedin.com/pub/huiting-wang/6b/1b0/237/sv">
+                <img border="0" src="linkedinlogo.png" width="30" height="30"/>
+            </a>
+        </div>
+        </div>
+
+
+        <div class="ccont">
+        <img class="contactpic" width="95px" src="images/mikael.png"/><br>
+        <div class="contact">
+            <b>Mikael Eriksson</b> <br>
+            Computer Science <br>
+            <a href="mailto:mikaele3@kth.se">
+                mikaele3@kth.se</a> <br>
+            <a href="https://se.linkedin.com/in/mikaelsveneriksson">
+                <img border="0" src="linkedinlogo.png" width="30" height="30"/>
+            </a>
+        </div>
+        </div>
+
+    </div>
 
 
 
-	</body>
+</body>
 </html>
