@@ -204,14 +204,14 @@ function init() {
   waterMesh.position.z = -7500;
   scene.add(waterMesh);
 
-
-  // Setup the controls
-  controls = new THREE.OrbitControls( camera, renderer.domElement );
-  //controls.addEventListener( 'change', render ); // add this only if there is no animation loop (requestAnimationFrame)
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.25;
-  controls.enableZoom = true;
-  controls.keyPanSpeed = 50.0;
+//      Uncomment to add OrbitControls!
+//   // Setup the controls
+//   controls = new THREE.OrbitControls( camera, renderer.domElement );
+//   //controls.addEventListener( 'change', render ); // add this only if there is no animation loop (requestAnimationFrame)
+//   controls.enableDamping = true;
+//   controls.dampingFactor = 0.25;
+//   controls.enableZoom = true;
+//   controls.keyPanSpeed = 50.0;
 
   window.addEventListener( 'resize', onWindowResize, false );
 
