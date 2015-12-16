@@ -19,8 +19,11 @@
         <script src="js/loaders/OBJLoader.js"></script>
         <script src="js/Mirror.js"></script>
         <script src="js/WaterShader.js"></script>
+
         <script src="js/otherRoom.js"></script>
+        <script src="js/fireShader.js"></script>
         <script src="js/fire.js"></script>
+
 
         <div id="infoicons">
             <img height="40px" src="images/info.png"/>
@@ -65,10 +68,19 @@
 
 
         <p><i>Fire by Lennart</i></p>
-        <p>To come..</p>
+        <p>Fire can look and feel so different depending on what type of fire you are after. The way we were trying to create it is by using Perlin Noise together with deformation of a figure that is to represent fire. By altering variables like Lacunarity, Gain and noise in all directions, we could get fires that differentiate alot and gives a whole range of possibilites on macro-level. This example follows the paper "Real-time Procedural Volumetric Fire (2007) by Alfred R. Fuller, and code for 3D noise algorithm is from Ashima's GitHub https://github.com/ashima/webgl-noise/blob/master/src/noise3D.glsl. Together with this there is also a simple particle system to add smoke and small fire particles to give it extra depth of behaving like fire does. The result of some varying fires can be seen below: </p>
+                <center>
+                <p> <img width="20%" src="images/FireFinal1.png"/>
+                <img width="18%" src="images/FireFinal2.png"/>
+                <img width="17%" src="images/FireFinal3.png"/></p></center>
 
         <p><i>Water by Huiting</i></p>
-        <p>To come..</p>
+        <p>Within the Graphics pipeline architecture, shading is the overwhelming key for rendering water. There are two types of shaders in Three.js, vertex shaders and fragment shaders.  Vertex shaders define the final position of the vertex on screen while fragment shaders define colors, textures and lightings. My work follows the example of Jonas Wagner (2012), learning to simulate the basic characteristics of water: waves, reflection, refraction, absorption, scattering, etc. Examples for different wave shapes rendering:</p>
+            <center>
+            <p> <img width="20%" src="images/wdot.png"/>
+                <img width="20%" src="images/wflower.png"/>
+                <img width="20%" src="images/wwave.png"/>
+                <img width="20%" src="images/wbubble.png"/></p></center>
 
     </div>
 
@@ -114,9 +126,8 @@
         </div>
         </div>
 
+
     </div>
-
-
 
 </body>
 </html>

@@ -1,3 +1,90 @@
+
+THREE.Fire = function ( fireTex, color ) {
+
+	var fireMaterial = new THREE.ShaderMaterial( {
+        defines         : THREE.FireShader.defines,
+        uniforms        : THREE.UniformsUtils.clone( THREE.FireShader.uniforms ),
+        vertexShader    : THREE.FireShader.vertexShader,
+        fragmentShader  : THREE.FireShader.fragmentShader,
+		transparent     : true,
+		depthWrite      : false,
+        depthTest       : false
+	} );
+
+    // initialize uniforms
+
+    fireTex.magFilter = fireTex.minFilter = THREE.LinearFilter;
+    fireTex.wrapS = THREE.wrapT = THREE.ClampToEdgeWrapping;
+
+    fireMaterial.uniforms.fireTex.value = fireTex;
+    fireMaterial.uniforms.color.value = color || new THREE.Color( 0xeeeeee );
+    fireMaterial.uniforms.invModelMatrix.value = new THREE.Matrix4();
+    fireMaterial.uniforms.scale.value = new THREE.Vector3( 1, 1, 1 );
+    fireMaterial.uniforms.seed.value = Math.random() * 19.19;
+
+	THREE.Mesh.call( this, new THREE.BoxGeometry( 1.0, 1.0, 1.0 ), fireMaterial );
+};
+
+THREE.Fire.prototype = Object.create( THREE.Mesh.prototype );
+THREE.Fire.prototype.constructor = THREE.Fire;
+
+THREE.Fire.prototype.update = function ( time ) {
+
+    var invModelMatrix = this.material.uniforms.invModelMatrix.value;
+
+    this.updateMatrix();
+    invModelMatrix.getInverse( this.matrix );
+
+    if( time !== undefined ) {
+        this.material.uniforms.time.value = time;
+    }
+
+    this.material.uniforms.invModelMatrix.value = invModelMatrix;
+
+    this.material.uniforms.scale.value = this.scale;
+
+};
+
+
+
+
+
+var fireTex = THREE.ImageUtils.loadTexture("Fire.png");
+
+var wireframeMat = new THREE.MeshBasicMaterial({
+  color : new THREE.Color(0xffffff),
+  wireframe : true
+});
+
+var fire = new THREE.Fire(fireTex);
+
+var wireframe = new THREE.Mesh(fire.geometry, wireframeMat.clone());
+fire.add(wireframe);
+fire.scale.x = fire.scale.z = 2000;
+fire.scale.y = 4000;
+
+fire.position.x = 4000;
+fire.position.z = 0;
+fire.position.y = -1500;
+wireframe.visible = false;
+
+scene.add(fire);
+
+var clock = new THREE.Clock();
+
+var controller = {
+  speed       : 1.0,
+  magnitude   : 0.2,
+  lacunarity  : 1.0,
+  gain        : 1.5,
+  noiseScaleX : 2.0,
+  noiseScaleY : 2.0,
+  noiseScaleZ : 2.0,
+  wireframe   : false
+};
+
+
+
 var fireParticles = [];
 var smokeParticles = [];
 var partColors = ['#eec82b','#d6961c','#a96232','#9a2511','#560000'];
@@ -15,18 +102,33 @@ makeParticles();
 
 function fireAnimate(){
   //meshFire.rotation.y += 0.02;
+                var delta = clock.getDelta();
+                var t = clock.elapsedTime * controller.speed;
+                fire.update(t);
+
+
+    fire.material.uniforms.magnitude.value = controller.magnitude;
+  fire.material.uniforms.lacunarity.value = controller.lacunarity;
+  fire.material.uniforms.gain.value = controller.gain;
+  fire.material.uniforms.noiseScale.value = new THREE.Vector4(
+    controller.noiseScaleX,
+    controller.noiseScaleY,
+    controller.noiseScaleZ,
+    0.3
+  );
+
+
+
+
   updateParticles();
+
 }
 
 function makeParticles() {
 
   var particle, material, smoke,smokeMaterial;
-  // Move from z position -1000 (far away)
-  // to 1000 (where the camera is) and add a random particle at every pos.
-  for ( var i= 0; i < 200; i+=1 ) {
 
-    // we make a particle material and pass through the
-    // colour and custom particle render function we defined.
+  for ( var i= 0; i < 50; i+=1 ) {
 
     var fireTexture = THREE.ImageUtils.loadTexture( 'smokeparticle.png' );
 
@@ -34,7 +136,6 @@ function makeParticles() {
     // make the particle
     particle = new THREE.Particle(material);
 
-    // give it a random x and y position between -750 and 750
     particle.position.x = 4000;
     particle.position.z = 0;
     particle.position.y = -2700;
@@ -47,9 +148,6 @@ function makeParticles() {
   }
 
   for ( var j= 0; j < 30; j+=1 ) {
-
-    // we make a particle material and pass through the
-    // colour and custom particle render function we defined.
 
     var smokeTexture = THREE.ImageUtils.loadTexture( 'smokeparticle.png' );
 
@@ -140,15 +238,15 @@ function updateParticles() {
     }
     else if( (pX < 3500 || pX > 4500) || (pZ < -500 || pZ > 500) ){
       particle.material.color = new THREE.Color(partColors[2]);
-      particle.scale.x = particle.scale.y = 600;
+      particle.scale.x = particle.scale.y = 50;
     }
     else if( (pX < 3600 || pX > 4400) || (pZ < -400 || pZ > 400) ){
       particle.material.color = new THREE.Color(partColors[1]);
-      particle.scale.x = particle.scale.y = 750;
+      particle.scale.x = particle.scale.y = 50;
     }
     else{
       particle.material.color = new THREE.Color(partColors[0]);
-      particle.scale.x = particle.scale.y = 900;
+      particle.scale.x = particle.scale.y = 50;
     }
 
 

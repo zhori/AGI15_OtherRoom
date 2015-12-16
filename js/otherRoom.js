@@ -125,7 +125,7 @@ function init() {
     var x = Math.random() * 24000 - 12000;
     var z = Math.random() * 24000 - 12000;
     var y = Math.random() * 1000 - 500;
-    if( (z < 7000 || z > 10000) || (x < -7000 || x > -4000) ){ //x < -7000 || x > -4000
+    if( (z < 10000 || z > 12000) || (x < -9000 || x > -4000) ){ //x < -7000 || x > -4000
       grassMeshes[i].position.x = x;
       grassMeshes[i].position.z = z;
       grassMeshes[i].position.y = y;
@@ -351,5 +351,4 @@ function waterrender() {
   water.material.uniforms.time.value += 1.0/4;
   water.render();
 }
-
 
